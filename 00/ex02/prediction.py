@@ -32,8 +32,8 @@ def simple_predict(x, theta):
 		print("Invalid input: wrong shape of theta ", theta.shape)
 		return None
 
-	result = np.array([float(theta[0] + theta[1] * x[i]) for i in range(x.size)])
-	return result
+	y_hat = np.array([float(theta[0] + theta[1] * x[i]) for i in range(x.size)])
+	return y_hat 
 
 def ex1():
 	x = np.arange(1,6)
