@@ -35,8 +35,8 @@ def predict_(x, theta):
 		return None
 
 	X = add_intercept(x)
-	result = [[sum([X[i][k] * theta[k][j] for k in range(X.shape[1])]) for j in range(theta.shape[1])] for i in range(X.shape[0])]
-	return np.array(result)
+	y_hat = X.dot(theta)
+	return np.array(y_hat)
 
 def ex1():
 	x = np.arange(1,6)
