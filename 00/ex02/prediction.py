@@ -26,9 +26,9 @@ def simple_predict(x, theta):
 		print("Invalid input: wrong shape of x", x.shape)
 		return None
 
-	if theta.ndim == 1:
+	if theta.ndim == 1 and theta.size == 2:
 		pass
-	elif not (theta.ndim == 2 and theta.shape[1] == 1):
+	elif not (theta.ndim == 2 and theta.shape == (2, 1)):
 		print("Invalid input: wrong shape of theta ", theta.shape)
 		return None
 
@@ -81,4 +81,4 @@ def ex2():
 	print(simple_predict(x, theta4)) # Output: array([-2., -1., 0., 1., 2.])
 
 if __name__ == "__main__":
-	ex1()
+	ex2()
