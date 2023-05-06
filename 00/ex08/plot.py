@@ -47,9 +47,7 @@ def plot_with_loss(x, y, theta):
 
 	X = add_intercept(x)
 	y_hat = X.dot(theta)
-	y_hat = y_hat.reshape(y_hat.size, 1)
-	#cost = loss_(y, y_hat.reshape(y_hat.size, 1)) * 2
-	cost = loss_(y, y_hat) * 2
+	cost = loss_(y, y_hat.reshape(y_hat.size, 1)) * 2
 
 	fig, ax = plt.subplots()
 	ax.scatter(x, y, color='blue', label='data points')
