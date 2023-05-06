@@ -1,4 +1,5 @@
 import numpy as np
+from prediction import predict_
 
 def loss_elem_(y, y_hat):
 	"""
@@ -17,7 +18,18 @@ def loss_elem_(y, y_hat):
 	Raises:
 	This function should not raise any Exception.
 	"""
+	for v in [y, y_hat]:
+		if not isinstance(v, np.ndarray):
+			print(f"Invalid input: argument {v} of ndarray type required")	
+			return None
 
+	for v in [y, y_hat]:
+		if not (v.ndim == 2 and v.shape in [(v.size, 1), (1, v.size)]):
+			print(f"Invalid input: wrong shape of {v}", v.shape)
+			return None
+
+	return (y_hat - y) ** 2
+	
 def loss_(y, y_hat):
 	"""
 	Description:
@@ -35,6 +47,19 @@ def loss_(y, y_hat):
 	Raises:
 	This function should not raise any Exception.
 	"""
+	for v in [y, y_hat]:
+		if not isinstance(v, np.ndarray):
+			print(f"Invalid input: argument {v} of ndarray type required")	
+			return None
+
+	for v in [y, y_hat]:
+		if not (v.ndim == 2 and v.shape in [(v.size, 1), (1, v.size)]):
+			print(f"Invalid input: wrong shape of {v}", v.shape)
+			return None
+
+	J_elem = loss_elem_(y, y_hat)
+	float_sum = float(np.sum(J_elem))
+	return float_sum / (2 * len(y))
 
 def ex1():
 	x1 = np.array([[0.], [1.], [2.], [3.], [4.]])
@@ -43,20 +68,20 @@ def ex1():
 	y1 = np.array([[2.], [7.], [12.], [17.], [22.]])
 	
 	# Example 1:
-	loss_elem_(y1, y_hat1) # Output: array([[0.], [1], [4], [9], [16]])
+	print(loss_elem_(y1, y_hat1)) # Output: array([[0.], [1], [4], [9], [16]])
 	# Example 2:
-	loss_(y1, y_hat1) # Output: 3.0
+	print(loss_(y1, y_hat1)) # Output: 3.0
 
 
 	x2 = np.array([0, 15, -9, 7, 12, 3, -21]).reshape(-1, 1)
 	theta2 = np.array([[0.], [1.]]).reshape(-1, 1)
-	y_hat2 = predict_(x3, theta3)
+	y_hat2 = predict_(x2, theta2)
 	y2 = np.array([2, 14, -13, 5, 12, 4, -19]).reshape(-1, 1)
 	
 	# Example 3:
-	loss_(y2, y_hat2) # Output: 2.142857142857143
+	print(loss_(y2, y_hat2)) # Output: 2.142857142857143
 	# Example 4:
-	loss_(y2, y2) # Output: 0.0
+	print(loss_(y2, y2)) # Output: 0.0
 
 if __name__ == "__main__":
 	ex1()
