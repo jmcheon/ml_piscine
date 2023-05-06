@@ -23,12 +23,9 @@ def loss_elem_(y, y_hat):
 			print(f"Invalid input: argument {v} of ndarray type required")	
 			return None
 
-	v = [y, y_hat]
-	for i in range(len(v)):
-		if v[i].ndim == 1:
-			v[i] = v[i].reshape(v[i].size, 1)
-		elif not (v[i].ndim == 2 and v[i].shape in [(v[i].size, 1), (1, v[i].size)]):
-			print(f"Invalid input: wrong shape of {v[i]}", v[i].shape)
+	for v in [y, y_hat]:
+		if not (v.ndim == 2 and v.shape in [(v.size, 1), (1, v.size)]):
+			print(f"Invalid input: wrong shape of {v}", v.shape)
 			return None
 
 	return (y_hat - y) ** 2
@@ -55,14 +52,9 @@ def loss_(y, y_hat):
 			print(f"Invalid input: argument {v} of ndarray type required")	
 			return None
 
-	v = [y, y_hat]
-	for i in range(len(v)):
-		print("bf:", v[i], v[i].shape)
-		if v[i].ndim == 1:
-			v[i] = v[i].reshape(v[i].size, 1)
-			print("test:", v[i], v[i].shape)
-		elif not (v[i].ndim == 2 and v[i].shape in [(v[i].size, 1), (1, v[i].size)]):
-			print(f"Invalid input: wrong shape of {v[i]}", v[i].shape)
+	for v in [y, y_hat]:
+		if not (v.ndim == 2 and v.shape in [(v.size, 1), (1, v.size)]):
+			print(f"Invalid input: wrong shape of {v}", v.shape)
 			return None
 
 	J_elem = loss_elem_(y, y_hat)

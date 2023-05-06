@@ -47,12 +47,15 @@ def plot_with_loss(x, y, theta):
 
 	X = add_intercept(x)
 	y_hat = X.dot(theta)
+	y_hat = y_hat.reshape(y_hat.size, 1)
 	#cost = loss_(y, y_hat.reshape(y_hat.size, 1)) * 2
-	cost = loss_(y, y_hat)
+	cost = loss_(y, y_hat) * 2
 
 	fig, ax = plt.subplots()
 	ax.scatter(x, y, color='blue', label='data points')
 	ax.plot(np.arange(1, y_hat.size + 1), y_hat, color='orange', label='prediction line')
+	for xi, yi, y_hat_i in zip(x, y, y_hat):
+		plt.plot([xi, xi], [yi, y_hat_i], '--', color='red')
 	ax.legend()
 	plt.title(f"Cost : {cost:.6f}")
 	plt.show()
