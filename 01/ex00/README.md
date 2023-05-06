@@ -26,4 +26,5 @@ Where:
 ### Hypothesis Notation
 
 $h_θ(x ^{(i)} )$ is the same as what we previously noted $\hat y ^{(i)}$ . The two notations are equivalent. They represent the model’s prediction (or estimation) of the $y ^{(i)}$ value. If you follow Andrew Ng’s course material on Coursera, you will see him using the former notation.
+
 &emsp; As a reminder: $h_θ(x^{(i)} ) = θ_0 + θ_1x^{(i)}$
