@@ -1,6 +1,6 @@
 import numpy as np
 
-def simple_gradient(x, y, theta):
+def gradient(x, y, theta):
 	"""
 	Computes a gradient vector from three non-empty numpy.array, without any for loop.
 	The three arrays must have compatible shapes.
@@ -36,16 +36,14 @@ def simple_gradient(x, y, theta):
 	elif not (theta.ndim == 2 and theta.shape == (2, 1)):
 		print(f"Invalid input: wrong shape of {theta}", theta.shape)
 		return None
+		
+	# We add a column of 1's for the column of interception
+	X = np.hstack((np.ones((x.shape[0], 1)), x))
+	#print("X:", X, X.shape)
+	X_t = np.transpose(X)
+	#print("X_t:", X_t, X_t.shape)
 
-	y_hat = theta[0] + theta[1]*x
-	J_elem = (y_hat - y)
-	#print("J_elem:", J_elem)
-	float_sum = float(np.sum(J_elem))
-	float_mul_sum = float(np.sum(J_elem*x))
-
-	j_0 = float_sum / len(y)
-	j_1 = float_mul_sum / len(y)
-	gradient = np.array([[j_0], [j_1]])
+	gradient = X_t.dot(X.dot(theta) - y) / len(y)
 	return gradient 
 
 def ex1():
@@ -54,11 +52,11 @@ def ex1():
 	
 	# Example 0:
 	theta1 = np.array([2, 0.7]).reshape((-1, 1))
-	gradient(x, y, theta1) # Output: array([[-19.0342...], [-586.6687...]])
+	print(gradient(x, y, theta1)) # Output: array([[-19.0342...], [-586.6687...]])
 	
 	# Example 1:
 	theta2 = np.array([1, -0.4]).reshape((-1, 1))
-	gradient(x, y, theta2) # Output: array([[-57.8682...], [-2230.1229...]])
+	print(gradient(x, y, theta2)) # Output: array([[-57.8682...], [-2230.1229...]])
 
 if __name__ == "__main__":
 	ex1()
