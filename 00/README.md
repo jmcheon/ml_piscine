@@ -89,7 +89,7 @@ You might have two questions at the moment:
 
 #### Another common notation
 $$\hat y = h_\theta(x)$$
-Because $\hat y$ is calculated with our linear hypothesis using $θ$ and $x$, it is sometimes written as $h_θ(x)$. The $h$ stands for $hypothesis$, and can be read as "$the$ $result$ $of$ $our$ $hypothesis$ $h$ $given$ $x$ $and$ $theta$".
+Because $\hat y$ is calculated with our linear hypothesis using $θ$ and $x$, it is sometimes written as $h_θ(x)$. The $h$ stands for $hypothesis$, and can be read as " $the$ $result$ $of$ $our$ $hypothesis$ $h$ $given$ $x$ $and$ $theta$".
 Then if x = 7, we can calculate: $\hat y = h_θ(x) = 33 + 5 × 7 = 68$ We can now say that according to our linear model, the **predicted value** of y given (x = 7) is 68.
 
 # Exercise 03
