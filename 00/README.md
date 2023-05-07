@@ -39,7 +39,7 @@ $$\hat y = ax + b$$
 We add the ˆ symbol over the y to specify that $\hat y$ (pronounced y-hat) is a **prediction** (or estimation) of the real value of $y$. The prediction is calculated with the **parameters** $a$ and $b$ and the input value $x$.
 For example, if $a = 5$ and $b = 33,$ then $\hat y = 5x + 33.$
 But in Machine Learning, we don’t like using the letters a and b. Instead we will use the following notation:
-$$ \hat y = \theta_0 + \theta_1 x$$
+$$\hat y = \theta_0 + \theta_1 x$$
 So if $θ_0 = 33$ and $θ_1 = 5$, then $\hat y = 33 + 5x.$
 To recap, this linear equation is our **hypothesis**. Then, all we will need to do is find the right values for our parameters $θ_0$ and $θ_1$ and we will get a fully-functional **prediction model**.
 
