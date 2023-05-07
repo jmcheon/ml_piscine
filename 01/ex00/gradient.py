@@ -41,8 +41,12 @@ def simple_gradient(x, y, theta):
 	y_hat = theta[0] + theta[1]*x
 	J_elem = (y_hat - y)
 	#print("J_elem:", J_elem)
-	float_sum = float(np.sum(J_elem))
-	float_mul_sum = float(np.sum(J_elem*x))
+	
+	float_sum = 0.0 #float_sum = float(np.sum(J_elem))
+	float_mul_sum = 0.0 #float_mul_sum = float(np.sum(J_elem*x))
+	for elem, elem_x in zip(J_elem, x):
+		float_sum += float(elem)
+		float_mul_sum += float(elem * elem_x)
 
 	j_0 = float_sum / len(y)
 	j_1 = float_mul_sum / len(y)
