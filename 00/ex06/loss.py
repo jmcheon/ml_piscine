@@ -65,7 +65,13 @@ def ex1():
 	x1 = np.array([[0.], [1.], [2.], [3.], [4.]])
 	theta1 = np.array([[2.], [4.]])
 	y_hat1 = predict_(x1, theta1)
+	print("y_hat1:", y_hat1, y_hat1.shape)
+
 	y1 = np.array([[2.], [7.], [12.], [17.], [22.]])
+	#ret = [float(y_hat1_i - y1_i) for y_hat1_i, y1_i in zip(y_hat1, y1)]
+	#print("y_hat1 - y1:", ret) 
+	#print("(y_hat1 - y1)^2:", np.array(ret) ** 2) 
+
 	
 	# Example 1:
 	print(loss_elem_(y1, y_hat1)) # Output: array([[0.], [1], [4], [9], [16]])
@@ -82,6 +88,13 @@ def ex1():
 	print(loss_(y2, y_hat2)) # Output: 2.142857142857143
 	# Example 4:
 	print(loss_(y2, y2)) # Output: 0.0
+
+	y_hat = np.array([[1], [2], [3], [4]])
+	y = np.array([[0], [0], [0], [0]])
+	#ret = [float(y_hat_i - y_i) for y_hat_i, y_i in zip(y_hat, y)]
+	#print("y_hat - y:", ret) 
+	#print("(y_hat - y)^2:", np.array(ret) ** 2) 
+	#print(loss_elem_(y, y_hat)) # Output: 
 
 if __name__ == "__main__":
 	ex1()

@@ -49,7 +49,7 @@ def plot(x, y, theta):
 
 	fig, ax = plt.subplots()
 	ax.scatter(x, y, color='blue', label='data points')
-	ax.plot(np.arange(1, y_hat.size + 1), y_hat, color='orange', label='prediction line')
+	ax.plot(x, y_hat, color='orange', label='prediction line')
 	ax.legend()
 	plt.show()
 
@@ -75,6 +75,11 @@ def ex1():
 	# Example 3:
 	theta3 = np.array([[3],[0.3]])
 	plot(x, y, theta3)
+
+def ex2():
+	plot(np.array([0, 1]), np.array([0, 1]), np.array([0, 1]))
+	plot(np.array([0, 1]), np.array([0, 1]), np.array([1, 1]))
+	plot(np.array([0, 2]), np.array([0, 0]), np.array([-1, 1]))
 
 if __name__ == "__main__":
 	ex1()

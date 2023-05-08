@@ -135,7 +135,10 @@ def r2score_(y, y_hat):
 	M_elem = (y - np.mean(y)) ** 2
 	float_J_sum = float(np.sum(J_elem))
 	float_M_sum = float(np.sum(M_elem))
-	r2score = 1 - (float_J_sum / float_M_sum)
+	if float_M_sum == 0:
+		r2score = 0.0
+	else:
+		r2score = 1 - (float_J_sum / float_M_sum)
 	return r2score
 	
 def ex1():	
@@ -171,5 +174,17 @@ def ex1():
 	## sklearn implementation
 	print("sklearn r2score:", r2_score(x,y)) ## Output: 0.9681721733858745
 
+def ex2():
+	x = np.array([0, 15, -9, 7, 12, 3, -21]).reshape(-1, 1)
+	y_hat = np.array([[1],[2],[3],[4]])
+	y = np.array([[0],[0],[0],[0]])
+
+	print("\nmy mse:", mse_(x, x))
+	print("\nmy mse:", mse_(y_hat, y))
+	print("\nmy rmse:", rmse_(y_hat, y))
+	print("\nmy mae:", mae_(x, x))
+	print("\nmy mae:", mae_(y_hat, y))
+	print("\nmy r2score:", r2score_(y_hat, y))
+
 if __name__ == "__main__":
-	ex1()
+	ex2()

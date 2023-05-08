@@ -23,7 +23,8 @@ class TinyStatistician:
 	#	print("middle index:", middle)
 	#	print("=====================================\n")
 		if len(numbers) % 2 == 0:
-			return float(numbers[middle - 1])
+
+			return float((numbers[middle - 1] + numbers[middle]) / 2)
 		else:
 			return float(numbers[middle])
 
@@ -49,7 +50,7 @@ class TinyStatistician:
 		sorted_x = sorted(x)
 		#print("sorted x:", sorted_x, f"p:{p}%\n")
 		# Bessel's correction: len(x) - 1 instead of len(x)
-		index = (len(x) - 1) * p / 100.0
+		index = (len(x) - 1) * (p / 100.0)
 		if index.is_integer():
 			return sorted_x[int(index)]
 		else:
@@ -75,6 +76,7 @@ class TinyStatistician:
 		suqared_diff_sum = 0.0
 		for num in x:
 			suqared_diff_sum += (num - mean) ** 2
+		#suqared_diff_sum = np.sum((num - mean) ** 2)
 		return suqared_diff_sum / (len(x) - 1)
 
 	def std(self, x):

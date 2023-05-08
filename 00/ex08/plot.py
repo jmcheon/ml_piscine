@@ -51,7 +51,7 @@ def plot_with_loss(x, y, theta):
 
 	fig, ax = plt.subplots()
 	ax.scatter(x, y, color='blue', label='data points')
-	ax.plot(np.arange(1, y_hat.size + 1), y_hat, color='orange', label='prediction line')
+	ax.plot(x, y_hat, color='orange', label='prediction line')
 	for xi, yi, y_hat_i in zip(x, y, y_hat):
 		plt.plot([xi, xi], [yi, y_hat_i], '--', color='red')
 	ax.legend()
@@ -73,6 +73,29 @@ def ex1():
 	
 	# Example 3:
 	theta3 = np.array([12, 0.8])
+	plot_with_loss(x, y, theta3)
+
+def ex2():
+	x = np.arange(1,6)
+	y = np.array([3.74013816, 3.61473236, 4.57655287, 4.66793434, 5.95585554])
+	#x = x.reshape(x.size, 1)
+	#y = y.reshape(y.size, 1)
+	#print("x:", x, x.shape)
+	#print("y:", y, y.shape)
+
+	#X = np.hstack((x, y))
+	#print("X:", X, X.shape)
+
+	# Example 1:
+	theta1 = np.array([[4.5],[-0.2]])
+	plot_with_loss(x, y, theta1)
+
+	# Example 2:
+	theta2 = np.array([[-1.5],[2]])
+	plot_with_loss(x, y, theta2)
+
+	# Example 3:
+	theta3 = np.array([[3],[0.3]])
 	plot_with_loss(x, y, theta3)
 
 if __name__ == "__main__":
