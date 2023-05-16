@@ -1,4 +1,6 @@
 import numpy as np
+from gradient import simple_gradient
+import matplotlib.pyplot as plt
 
 def fit_(x, y, theta, alpha, max_iter):
 	"""
@@ -39,34 +41,43 @@ def fit_(x, y, theta, alpha, max_iter):
 		elif not (v[i].ndim == 2 and v[i].shape[1] == 1):
 			print(f"Invalid input: wrong shape of {v[i]}", v[i].shape)
 			return None
+	x, y = v
 	if theta.ndim == 1:
 		theta = theta.reshape(theta.size, 1)
 	elif not (theta.ndim == 2 and theta.shape == (2, 1)):
 		print(f"Invalid input: wrong shape of {theta}", theta.shape)
 		return None
 
-	# We add a column of 1's for the column of interception
-	X = np.hstack((np.ones((x.shape[0], 1)), x))
-	#print("X:", X, X.shape)
-	X_t = np.transpose(X)
-	#print("X_t:", X_t, X_t.shape)
+	# Weights to update: alpha * mean((y_hat - y) * x) 
+	# Bias to update: alpha * mean(y_hat - y)
 
-	gradient = X_t.dot(X.dot(theta) - y) / len(y)
-	
-	for i in max_iter:
+	new_theta = np.copy(theta.astype("float64"))
+	for _ in range(max_iter):
+		# Compute gradient descent
+		gradient = simple_gradient(x, y ,new_theta)
+
+		# Update new_theta
+		new_theta[0] -= alpha * gradient[0]
+		new_theta[1] -= alpha * gradient[1]
 
 	return new_theta
-	
+
 def ex1():
 	x = np.array([[12.4956442], [21.5007972], [31.5527382], [48.9145838], [57.5088733]])
 	y = np.array([[37.4013816], [36.1473236], [45.7655287], [46.6793434], [59.5585554]])
+	#print("x:", x.shape, x.ndim)
+	#print("y:", y.shape, y.ndim)
 	theta= np.array([1, 1]).reshape((-1, 1))
+
 	# Example 0:
 	theta1 = fit_(x, y, theta, alpha=5e-8, max_iter=1500000)
-	print(theta1)
-	
-	# Example 1:
-	print(predict(x, theta1))
+	print(theta1) # Output: array([[1.40709365], [1.1150909 ]])
 
+	# Example 1:
+	X = np.hstack((np.ones((x.shape[0], 1)), x))
+	y_hat = X.dot(theta1)
+	print(np.array(y_hat)) # Output: array([[15.3408728 ], [25.38243697], [36.59126492], [55.95130097], [65.53471499]])
+	#print(predict_(x, theta1)) # Output: array([[15.3408728 ], [25.38243697], [36.59126492], [55.95130097], [65.53471499]])
+	
 if __name__ == "__main__":
 	ex1()
