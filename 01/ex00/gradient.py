@@ -31,6 +31,7 @@ def simple_gradient(x, y, theta):
 		elif not (v[i].ndim == 2 and v[i].shape[1] == 1):
 			print(f"Invalid input: wrong shape of {v[i]}", v[i].shape)
 			return None
+	x, y = v
 
 	if theta.ndim == 1:
 		theta = theta.reshape(theta.size, 1)

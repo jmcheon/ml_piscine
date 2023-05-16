@@ -30,6 +30,7 @@ def mse_(y, y_hat):
 		elif not (v[i].ndim == 2 and v[i].shape[1] == 1):
 			print(f"Invalid input: wrong shape of {v[i]}", v[i].shape)
 			return None
+	y, y_hat = v
 
 	J_elem = (y_hat - y) ** 2
 	float_sum = float(np.sum(J_elem))
@@ -64,6 +65,8 @@ def rmse_(y, y_hat):
 		elif not (v[i].ndim == 2 and v[i].shape[1] == 1):
 			print(f"Invalid input: wrong shape of {v[i]}", v[i].shape)
 			return None
+	y, y_hat = v
+
 	mse = mse_(y, y_hat) 
 	rmse = mse ** 0.5
 	return rmse
@@ -96,6 +99,7 @@ def mae_(y, y_hat):
 		elif not (v[i].ndim == 2 and v[i].shape[1] == 1):
 			print(f"Invalid input: wrong shape of {v[i]}", v[i].shape)
 			return None
+	y, y_hat = v
 
 	J_elem = np.abs(y_hat - y)
 	float_sum = float(np.sum(J_elem))
@@ -127,9 +131,11 @@ def r2score_(y, y_hat):
 	for i in range(len(v)): 
 		if v[i].ndim == 1:
 			v[i] = v[i].reshape(v[i].size, 1)
+			print("current vecter:", v[i], v[i].shape)
 		elif not (v[i].ndim == 2 and v[i].shape[1] == 1):
 			print(f"Invalid input: wrong shape of {v[i]}", v[i].shape)
 			return None
+	y, y_hat = v
 
 	J_elem = (y_hat - y) ** 2
 	M_elem = (y - np.mean(y)) ** 2
@@ -187,4 +193,4 @@ def ex2():
 	print("\nmy r2score:", r2score_(y_hat, y))
 
 if __name__ == "__main__":
-	ex2()
+	ex1()
