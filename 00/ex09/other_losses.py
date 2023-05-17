@@ -131,7 +131,6 @@ def r2score_(y, y_hat):
 	for i in range(len(v)): 
 		if v[i].ndim == 1:
 			v[i] = v[i].reshape(v[i].size, 1)
-			print("current vecter:", v[i], v[i].shape)
 		elif not (v[i].ndim == 2 and v[i].shape[1] == 1):
 			print(f"Invalid input: wrong shape of {v[i]}", v[i].shape)
 			return None
