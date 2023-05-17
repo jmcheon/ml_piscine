@@ -10,6 +10,7 @@
 ### Objective
 
 Manipulate the hypothesis to make prediction. You must implement the following formula as a function:
+```math
 $$\hat{y} = X^{'}\cdot\theta = \begin{bmatrix}
 1 & {x}_1^{(1)} & \ldots & x_n^{(1)} \\
 \vdots & \vdots & \ddots & \vdots\\
@@ -24,6 +25,7 @@ $$\hat{y} = X^{'}\cdot\theta = \begin{bmatrix}
 \vdots \\
 \theta_{0} + \theta_1 x_1^{(m)} + \ldots +  \theta_n x_n^{(m)} \\
 \end{bmatrix}$$
+```
 
 Where:
 
