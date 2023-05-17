@@ -65,5 +65,18 @@ def ex1():
 	theta2 = np.array([1, -0.4]).reshape((-1, 1))
 	print(simple_gradient(x, y, theta2)) # Output: array([[-57.86823748], [-2230.12297889]])
 
+def ex2():
+	x = np.array(range(1, 11)).reshape(-1, 1)
+	y = 1.25 * x
+
+	theta1 = np.array([[1.], [1.]])
+	print(simple_gradient(x, y, theta1))
+
+	theta2 = np.array([[1.], [-0.4]])
+	print(simple_gradient(x, y, theta2))
+
+	theta3 = np.array([[0.], [1.25]])
+	print(simple_gradient(x, y, theta3))
+
 if __name__ == "__main__":
-	ex1()
+	ex2()

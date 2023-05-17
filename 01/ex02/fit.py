@@ -79,5 +79,11 @@ def ex1():
 	print(np.array(y_hat)) # Output: array([[15.3408728 ], [25.38243697], [36.59126492], [55.95130097], [65.53471499]])
 	#print(predict_(x, theta1)) # Output: array([[15.3408728 ], [25.38243697], [36.59126492], [55.95130097], [65.53471499]])
 	
+def ex2():
+	x = np.array(range(1, 101)).reshape(-1, 1)
+	y = 0.75 * x + 5
+	theta = np.array([[1.],[1.]])
+	print(fit_(x, y, theta, 1e-5, 20000))
+
 if __name__ == "__main__":
 	ex1()

@@ -6,32 +6,6 @@ import matplotlib.pylab as pl
 from sklearn.metrics import mean_squared_error
 from my_linear_regression import MyLinearRegression as MyLR
 
-
-def predict_(x, theta):
-	"""
-	Computes the vector of prediction y_hat from two non-empty numpy.array.
-	"""
-	if not isinstance(x, np.ndarray) or not isinstance(theta, np.ndarray):
-		print("Invalid input: arguments of ndarray type required")	
-		return None
-
-	if x.ndim == 1:
-		x = x.reshape(x.size, 1)
-	elif not (x.ndim == 2 and x.shape[1] == 1):
-		print("Invalid input: wrong shape of x", x.shape)
-		return None
-
-	if theta.ndim == 1 and theta.size == 2:
-		pass
-	elif not (theta.ndim == 2 and theta.shape == (2, 1)):
-		print("Invalid input: wrong shape of theta ", theta.shape)
-		return None
-
-	X = np.hstack((np.ones((x.shape[0], 1)), x))
-	y_hat = X.dot(theta)
-	return np.array(y_hat)
-
-
 def hypothesis():
 	plt.scatter(Xpill, Yscore, label="$S_{true(pills)}$", color="cornflowerblue")
 	plt.plot(Xpill, linear_model.predict_(Xpill), label="$S_{predict(pills)}$", color="limegreen", linestyle="dashed")
@@ -44,16 +18,21 @@ def hypothesis():
 def show_losses():
 	n = 6
 	theta0 = np.linspace(70, 100, n)
-	theta1 = np.linspace(-18, -2, 100)
+	theta1 = np.linspace(-14, -4, 100)
+	lst_thetas = []
+	for t0 in theta0:
+		sublist = [[t0, t1] for t1 in theta1]
+		lst_thetas.append([sublist])
 	
 	colors = pl.cm.Greys(np.linspace(1, 0, n + 1))
 	fig, axe = plt.subplots(1, 1)
-	for t0, color in zip(theta0, colors):
+	for thetas, color in zip(lst_thetas, colors):
 		lst_loss = []
-		for t1 in theta1:
-			y_hat = predict_(Xpill, np.array([[t0], [t1]]))
+		for theta in thetas[0]:
+			linear_model = MyLR(np.array(theta))
+			y_hat = linear_model.predict_(Xpill)
 			lst_loss.append(linear_model.loss_(Yscore, y_hat))
-		axe.plot(theta1, np.array(lst_loss), label=r"J($\theta_0$ = " + f"{t0}," + r"$\theta_1$)", lw=2.5, c=color)
+		axe.plot(theta1, np.array(lst_loss), label=r"J($\theta_0$ = " + f"{theta[0]}, " + r"$\theta_1$)", lw=2.5, c=color)
 	plt.grid()
 	plt.legend(loc="lower right")
 	plt.xlabel(r"$\theta_1$")

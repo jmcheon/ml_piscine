@@ -59,5 +59,26 @@ def ex1():
 	theta2 = np.array([1, -0.4]).reshape((-1, 1))
 	print(gradient(x, y, theta2)) # Output: array([[-57.8682...], [-2230.1229...]])
 
+def ex2(lst):
+	for n in lst:
+		x = np.array(range(1, n + 1)).reshape(-1, 1)
+		y = 1.25 * x
+	
+		theta = np.array([[1.],[1.]])
+		print(gradient(x, y, theta))
+
+def ex3(lst):
+	for n in lst:
+		x = np.array(range(1, n + 1)).reshape(-1, 1)
+		y = -0.75 * x + 5
+	
+		theta = np.array([[4.],[-1.]])
+		print(gradient(x, y, theta))
+
 if __name__ == "__main__":
 	ex1()
+	print()
+	#ex2([100, 1000, 10000])
+	print()
+	#ex3([100, 1000, 10000])
+
