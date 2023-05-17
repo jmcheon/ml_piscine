@@ -9,10 +9,8 @@
 
 ### Objective
 
-Understand and manipulate the notion of gradient and gradient descent in machine learning. You must write a function that computes the gradient of the loss function. It must compute a partial derivative with respect to each theta parameter separately, and return the vector gradient. The partial derivatives can be calculated with the following formulas:
-$$\nabla (J)_0 = \frac 1 m \sum_{i=1}^{m}(h_\theta (x^{(i)}) - y^{(i)})$$
-$$\nabla (J)_1 = \frac 1 m \sum_{i=1}^{m}(h_\theta (x^{(i)}) - y^{(i)})x^{(i)}$$
-
+Understand and manipulate the notion of gradient and gradient descent in machine learning. You must write a function that computes the gradient of the loss function. It must compute a partial derivative with respect to each theta parameter separately, and return the vector gradient. The partial derivatives can be calculated with the following formulas: $$\nabla (J)_0 = \frac{1}{m} \sum(h_θ(x^{(i)}) - y^{(i)})$$
+$$\nabla (J)_1 = \frac 1 m \sum(h_θ (x^{(i)}) - y^{(i)})x^{(i)}$$
 Where:
 
  - $∇(J)$ is the gradient vector of size 2 × 1, (this strange symbol : $∇$ is called nabla)
