@@ -49,9 +49,11 @@ class MyLinearRegression():
 				return None
 		y, y_hat = v
 	
-		J_elem = (y_hat - y) ** 2
-		float_sum = float(np.sum(J_elem))
-		mse = float_sum / len(y)
+		squared_diff = np.square(y_hat - y)
+		mse = np.sum(squared_diff) / len(y)
+		# J_elem = (y_hat - y) ** 2
+		# float_sum = float(np.sum(J_elem))
+		# mse = float_sum / len(y)
 		return mse 
 	
 	@staticmethod
@@ -133,11 +135,18 @@ class MyLinearRegression():
 
 		new_theta = np.copy(self.thetas.astype("float64"))
 		for _ in range(self.max_iter):
+
+			#grad = np.dot(x_transpose, error) / m
 			# Compute gradient descent
 			grad = self.gradient(x, y ,new_theta)
+
+            # Handle invalid values in the gradient
+			if np.any(np.isnan(grad)) or np.any(np.isinf(grad)):
+				#print("Warning: Invalid values encountered in the gradient. Skipping update.")
+				continue
 			# Update new_theta
 			new_theta -= (self.alpha * grad)
-
+			
 		self.thetas = new_theta
 		return self.thetas
 
@@ -156,7 +165,7 @@ class MyLinearRegression():
 		if self.thetas.ndim == 1 and self.thetas.size == x.shape[1] + 1:
 			self.thetas = self.thetas.reshape(x.shape[1] + 1, 1)
 		elif not (self.thetas.ndim == 2 and self.thetas.shape == (x.shape[1] + 1, 1)):
-			print(f"Invalid input: wrong shape of {self.thetas}", self.thetas.shape)
+			print(f"p Invalid input: wrong shape of {self.thetas}", self.thetas.shape)
 			return None
 		
 		X = np.hstack((np.ones((x.shape[0], 1)), x))
