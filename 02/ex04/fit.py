@@ -1,4 +1,8 @@
 import numpy as np
+import os, sys
+
+path = os.path.join(os.path.dirname(__file__), '..', 'ex03')
+sys.path.insert(1, path)
 from gradient import gradient
 
 def fit_(x, y, theta, alpha, max_iter):
@@ -79,6 +83,14 @@ def ex1():
 	y_hat = X.dot(theta2)
 	print("\n", y_hat)
 	#print(predict_(x, theta2)) # Output: array([[19.5992..], [-2.8003..], [-25.1999..], [-47.5996..]])
+
+def ex2():
+	X = np.array([[1., 1., 2., 3.], [5., 8., 13., 21.], [34., 55., 89., 144.]])
+	Y = np.array([[23.], [48.], [218.]])
+	theta = np.array([[1.], [1.], [1.], [1.], [1]])
+
+	theta2 = fit_(X, Y, theta, alpha = 1.6e-4, max_iter=200000)
+	print(theta2) # Output: array([[18.188..], [2.767..], [-0.374..], [1.392..], [0.017..]])
 
 if __name__ == "__main__":
 	ex1()
