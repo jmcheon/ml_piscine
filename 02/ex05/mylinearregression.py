@@ -110,7 +110,7 @@ class MyLinearRegression():
 		# arguments type varification
 		for v in [x, y]:
 			if not isinstance(v, np.ndarray):
-				print(f"Invalid input: argument {v} of ndarray type required")	
+				print(f"Invalid input: argument {v} of ndarray type required")
 				return None
 
 		if not x.ndim == 2:
@@ -128,25 +128,18 @@ class MyLinearRegression():
 		elif not (self.thetas.ndim == 2 and self.thetas.shape == (x.shape[1] + 1, 1)):
 			print(f"Invalid input: wrong shape of {self.thetas}", self.thetas.shape)
 			return None
-
-
 		# Weights to update: alpha * mean((y_hat - y) * x) 
 		# Bias to update: alpha * mean(y_hat - y)
-
 		new_theta = np.copy(self.thetas.astype("float64"))
 		for _ in range(self.max_iter):
-
-			#grad = np.dot(x_transpose, error) / m
 			# Compute gradient descent
 			grad = self.gradient(x, y ,new_theta)
-
-            # Handle invalid values in the gradient
+   		        # Handle invalid values in the gradient
 			if np.any(np.isnan(grad)) or np.any(np.isinf(grad)):
 				#print("Warning: Invalid values encountered in the gradient. Skipping update.")
 				continue
 			# Update new_theta
 			new_theta -= (self.alpha * grad)
-			
 		self.thetas = new_theta
 		return self.thetas
 

@@ -45,7 +45,7 @@ def gradient(x, y, theta):
 	#print("X_t:", X_t, X_t.shape)
 
 	gradient = X_t.dot(X.dot(theta) - y) / len(y)
-	return gradient 
+	return gradient
 
 def ex1():
 	x = np.array([12.4956442, 21.5007972, 31.5527382, 48.9145838, 57.5088733]).reshape((-1, 1))
