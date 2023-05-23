@@ -9,8 +9,8 @@
 
 ### Objective
 
-Understand and manipulate concept of gradient in the case of logistic formulation. You must implement the following formula as a function: $$\nabla (J)_0 = \frac 1 m \sum_{i=1}^{m}(h_\theta (x^{(i)}) - y^{(i)})$$
-$$\nabla (J)_j = \frac 1 m \sum_{i=1}^{m}(h_\theta (x^{(i)}) - y^{(i)})x_j^{(i)} \quad \text{for } j = 1, \ldots, n$$
+Understand and manipulate concept of gradient in the case of logistic formulation. You must implement the following formula as a function: $$\nabla (J)_0 = \frac 1 m \sum(h_θ (x^{(i)}) - y^{(i)})$$
+$$\nabla (J)_j = \frac 1 m \sum(h_θ (x^{(i)}) - y^{(i)})x_j^{(i)} \quad \text{for } j = 1, \ldots, n$$
 
 Where:
 
