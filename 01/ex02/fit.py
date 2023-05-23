@@ -1,6 +1,9 @@
+import os, sys
 import numpy as np
+
+path = os.path.join(os.path.dirname(__file__), '..', 'ex00')
+sys.path.insert(1, path)
 from gradient import simple_gradient
-import matplotlib.pyplot as plt
 
 def fit_(x, y, theta, alpha, max_iter):
 	"""

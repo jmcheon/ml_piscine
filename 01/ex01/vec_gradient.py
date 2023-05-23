@@ -76,9 +76,9 @@ def ex3(lst):
 		print(gradient(x, y, theta))
 
 if __name__ == "__main__":
-	ex1()
+	#ex1()
 	print()
-	#ex2([100, 1000, 10000])
+	ex2([100, 1000, 10000])
 	print()
-	#ex3([100, 1000, 10000])
+	ex3([100, 1000, 10000])
 

@@ -1,9 +1,12 @@
 import numpy as np
 import pandas as pd
-import sys
+import sys, os
 import matplotlib.pyplot as plt
 import matplotlib.pylab as pl
 from sklearn.metrics import mean_squared_error
+
+path = os.path.join(os.path.dirname(__file__), '..', 'ex03')
+sys.path.insert(1, path)
 from my_linear_regression import MyLinearRegression as MyLR
 
 def hypothesis():
@@ -17,8 +20,11 @@ def hypothesis():
 
 def show_losses():
 	n = 6
-	theta0 = np.linspace(70, 100, n)
-	theta1 = np.linspace(-14, -4, 100)
+	thetas = np.random.rand(2, 1)
+	linear_model = MyLR(thetas, alpha=5e-2, max_iter=1000)
+	linear_model.fit_(Xpill, Yscore)
+	theta0 = np.linspace(linear_model.thetas[0] - 10, linear_model.thetas[0] + 10, n)
+	theta1 = np.linspace(linear_model.thetas[1] - 5, linear_model.thetas[1] + 5, 100)
 	lst_thetas = []
 	for t0 in theta0:
 		sublist = [[t0, t1] for t1 in theta1]
@@ -29,7 +35,7 @@ def show_losses():
 	for thetas, color in zip(lst_thetas, colors):
 		lst_loss = []
 		for theta in thetas[0]:
-			linear_model = MyLR(np.array(theta))
+			linear_model = MyLR(np.array(theta), alpha=5e-2, max_iter=1000)
 			y_hat = linear_model.predict_(Xpill)
 			lst_loss.append(linear_model.loss_(Yscore, y_hat))
 		axe.plot(theta1, np.array(lst_loss), label=r"J($\theta_0$ = " + f"{theta[0]}, " + r"$\theta_1$)", lw=2.5, c=color)
@@ -63,8 +69,10 @@ if __name__ == "__main__":
 	Xpill = np.array(data['Micrograms']).reshape(-1,1)
 	Yscore = np.array(data['Score']).reshape(-1,1)
 	thetas = np.random.rand(2, 1)
+	#print("original theta:", thetas)
 	linear_model = MyLR(thetas, alpha=5e-2, max_iter=1000)
 	linear_model.fit_(Xpill, Yscore)
+	#print("fitted theta:", linear_model.thetas)
 
 	hypothesis()
 	show_losses()

@@ -34,6 +34,42 @@ class MyLinearRegression():
 			print(f"Invalid input: argument max_iter of int type required")	
 			return False 
 		return True
+
+	@staticmethod
+	def mse_(y, y_hat):
+		"""
+		Description:
+		Calculate the MSE between the predicted output and the real output.
+	
+		Args:
+		y: has to be a numpy.array, a vector of dimension m * 1.
+		y_hat: has to be a numpy.array, a vector of dimension m * 1.
+	
+		Returns:
+		mse: has to be a float.
+		None if there is a matching dimension problem.
+	
+		Raises:
+		This function should not raise any Exceptions.
+		"""
+		for v in [y, y_hat]:
+			if not isinstance(v, np.ndarray):
+				print(f"Invalid input: argument {v} of ndarray type required")	
+				return None
+	
+		v = [y, y_hat]
+		for i in range(len(v)): 
+			if v[i].ndim == 1:
+				v[i] = v[i].reshape(v[i].size, 1)
+			elif not (v[i].ndim == 2 and v[i].shape[1] == 1):
+				print(f"Invalid input: wrong shape of {v[i]}", v[i].shape)
+				return None
+		y, y_hat = v
+	
+		J_elem = (y_hat - y) ** 2
+		float_sum = float(np.sum(J_elem))
+		mse = float_sum / len(y)
+		return mse 
 	
 	def fit_(self, x, y):
 		"""
