@@ -1,7 +1,6 @@
 import sys, os, itertools, pickle
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from multiple_polynomial_model import add_polynomial_features
 
 path = os.path.join(os.path.dirname(__file__), '..', 'ex05')
@@ -92,4 +91,4 @@ if __name__ == "__main__":
 		print("Invalid file error.")
 		sys.exit()
 	x_features = ['weight', 'prod_distance', 'time_delivery']
-	benchmarck(x_features)
+	benchmark(x_features)
