@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, pickle
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -52,8 +52,8 @@ def plot_scatters_and_prediction(x_features, x, y ,best_model):
 		plt.legend()
 		plt.show()
 
-def ex1(x_features):
-	# 1. Perform min-max normalization by calculate the minimum and maximum values for each feature
+def best_hypothesis(x_features, models):
+	# 1. Perform min-max normalization by calculating the minimum and maximum values for each feature
 	min_vals = np.min(data, axis=0)
 	max_vals = np.max(data, axis=0)
 	normalized_data = (data - min_vals) / (max_vals - min_vals)
@@ -65,28 +65,6 @@ def ex1(x_features):
 	print("x:", x.shape)
 	print("y:", y.shape)
 	x_train, x_test, y_train, y_test = data_spliter(x, y, 0.8)
-
-	# 3. Consider several Linear Regression models with polynomial hypotheses of different degrees. 
-	# Train and evaluate each model on the test set.
-	# Initialize a dictionary to store the models and their evaluation metrics
-	models = {}
-	for degree in range(1, 5):
-		# Create the polynomial features for the current degree
-		x_train_poly = add_polynomial_features(x_train, degree)
-		x_test_poly = add_polynomial_features(x_test, degree)
-
-		# Initialize and train the linear regression model
-		thetas = np.zeros((x_train_poly.shape[1] + 1, 1))  # Adjust the shape of thetas based on the number of features
-		model = MyLR(thetas, 1e-4, 50000)
-		model.fit_(x_train_poly, y_train)
-
-		# Evaluate the model on the test set
-		y_pred = model.predict_(x_test_poly)
-		mse = model.mse_(y_test, y_pred)
-		print("mse:", mse)
-
-		# Store the model and its evaluation metric
-		models[degree] = {'model': model, 'mse': mse}
 
 	# 4. Determine the best hypothesis based on the evaluation metrics, similar to before.
 	best_model = min(models.items(), key=lambda x: x[1]['mse'])
@@ -132,6 +110,37 @@ def ex1(x_features):
 
 	#plot_scatters_and_prediction(x_features, x, y, best_model)
 
+def load_model_by_degree(degree):
+	# Load the models from the pickle file
+	filename = f"model_degree_{degree}.pickle"
+	with open(filename, 'rb') as file:
+		model = pickle.load(file)
+	
+	print(f"Degree: {degree}")
+	#print("Model:", model['model'])
+	print("Thetas:", model['model'].thetas)
+	print("Alpha:", model['model'].alpha)
+	print("Max Iterations:", model['model'].max_iter)
+	print("MSE:", model['mse'])
+	print()
+
+def load_models():
+	# Load the models from the pickle file
+	filename = "models.pickle"
+	with open(filename, 'rb') as file:
+		models = pickle.load(file)
+	
+	# Iterate and print the data
+	for degree, model_data in models.items():
+		print(f"Degree: {degree}")
+		#print("Model:", model_data)
+		print("Thetas:", model_data['model'].thetas)
+		print("Alpha:", model_data['model'].alpha)
+		print("Max Iterations:", model_data['model'].max_iter)
+		print("MSE:", model_data['mse'])
+		print()
+	return models
+
 if __name__ == "__main__":
 	try:
 		data = pd.read_csv("space_avocado.csv")
@@ -140,4 +149,6 @@ if __name__ == "__main__":
 		sys.exit()
 	x_features = ['weight', 'prod_distance', 'time_delivery']
 	#plot_scatters(x_features)
-	ex1(x_features)
+	models = load_models()
+	best_hypothesis(x_features, models)
+	#load_model_by_degree(1)
