@@ -91,6 +91,10 @@ class MyLinearRegression():
 		elif not (y.ndim == 2 and y.shape[1] == 1):
 			print(f"Invalid input: wrong shape of y", y.shape)
 			return None
+	
+		if x.shape[0] != y.shape[0]:
+			print(f"Invalid input: x, y matrices should be compatible.")
+			return None
 
 		if theta.ndim == 1 and theta.size == x.shape[1] + 1:
 			theta = theta.reshape(x.shape[1] + 1, 1)
@@ -121,6 +125,10 @@ class MyLinearRegression():
 			y = y.reshape(y.size, 1)
 		elif not (y.ndim == 2 and y.shape[1] == 1):
 			print(f"Invalid input: wrong shape of y", y.shape)
+			return None
+		
+		if x.shape[0] != y.shape[0]:
+			print(f"Invalid input: x, y matrices should be compatible.")
 			return None
 
 		if self.thetas.ndim == 1 and self.thetas.size == x.shape[1] + 1:
