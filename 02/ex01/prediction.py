@@ -61,5 +61,18 @@ def ex1():
 	print("\nexample4:")
 	print(predict_(x, theta4)) # Output: array([[12.5], [32. ], [51.5], [71. ]])
 
+def ex2():
+	x = np.arange(1,13).reshape(-1,2)
+	theta = np.ones(3).reshape(-1,1)
+	print(predict_(x, theta)) # Ouput: array([[4.], [ 8.], [12.], [16.], [20.], [24.]])
+
+	x = (np.arange(1,13)).reshape(-1,3)
+	theta = np.ones(4).reshape(-1,1)
+	print(predict_(x, theta)) # Ouput: array([[ 7.], [16.], [25.], [34.]])
+
+	x = (np.arange(1,13)).reshape(-1,4) 
+	theta = np.ones(5).reshape(-1,1)
+	print(predict_(x, theta)) # Ouput: array([[11.], [27.], [43.]])
+
 if __name__ == "__main__":
-	ex1()
+	ex2()

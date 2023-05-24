@@ -151,4 +151,3 @@ if __name__ == "__main__":
 	#plot_scatters(x_features)
 	models = load_models()
 	best_hypothesis(x_features, models)
-	#load_model_by_degree(1)

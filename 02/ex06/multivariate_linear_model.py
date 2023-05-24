@@ -33,22 +33,23 @@ def part_one():
 			"$x_{1}$: age (in years)", 
 			('darkblue', 'cornflowerblue'),
 			'lower left',
-			np.array([[700.0], [-1.0]]))
+			np.array([[650.0], [-13.0]]))
 	univariate_model('Thrust_power', 
 			"$x_{2}$: thrust power(in 10Km/s)", 
 			 ('green', 'lime'),
 			'upper left',
-			np.array([[0.0], [-1.0]]))
+			np.array([[40.0], [5.0]]))
 	univariate_model('Terameters', 
 			"x_{3}$: distance totalizer value of spcaecraft (in Tmeters)", 
 			('purple', 'violet'),
 			'upper right',
-			np.array([[700.0], [-1.0]]))
+			np.array([[750.0], [-3.0]]))
 
 def multivariate_model():
 	X = np.array(data[['Age','Thrust_power','Terameters']])
 	Y = np.array(data[['Sell_price']])
 	thetas = np.array([1.0, 1.0, 1.0, 1.0])
+	#thetas = np.array([380.0, -24.0, 5.0, -3.0])
 	my_lreg = MyLR(thetas, alpha = 1e-5, max_iter = 500000)
 
 	# Example 1:

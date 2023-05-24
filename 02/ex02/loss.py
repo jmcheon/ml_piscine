@@ -47,5 +47,19 @@ def ex1():
 	# Example 2:
 	print(loss_(X, X)) # Output: 0.0
 
+def ex2():
+	n = 1
+	y = (np.ones(n)).reshape(-1,1)
+	y_hat = (np.zeros(n)).reshape(-1,1)
+	print(loss_(y, y_hat)) # Output: 0.5 
+
+	y = (np.ones(n)).reshape(-1,1)+4
+	y_hat = (np.zeros(n)).reshape(-1,1)
+	print(loss_(y, y_hat)) # Output: 12.5
+
+	y = (np.ones(7)).reshape(-1,1)+4
+	y_hat = (np.arange(7)).reshape(-1,1)
+	print(loss_(y, y_hat)) # Output: 4
+
 if __name__ == "__main__":
-	ex1()
+	ex2()

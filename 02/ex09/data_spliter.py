@@ -43,8 +43,8 @@ def data_spliter(x, y, proportion):
 	p = int(x.shape[0] * proportion)
 	#np.random.shuffle(data)
 	np.random.default_rng(42).shuffle(data)
-	x_train, x_test= data[p:, :-1], data[:p, :-1]
-	y_train, y_test = data[p:, -1:], data[:p, -1:] 
+	x_train, x_test= data[:p, :-1], data[p:, :-1]
+	y_train, y_test = data[:p, -1:], data[p:, -1:] 
 	return (x_train, x_test, y_train, y_test)
 
 
@@ -73,5 +73,19 @@ def ex2():
 	# Example 4:
 	print(data_spliter(x2, y, 0.5))
 
+def ex3():
+	x = np.ones(42).reshape((-1, 1))
+	y = np.ones(42).reshape((-1, 1))
+	ret = data_spliter(x, y, 0.42)
+	print(list(map(np.shape, ret))) # [(17,1), (25,1), (17,1), (25,1)]
+
+	np.random.seed(42)
+	tmp= np.arange(0,110).reshape(11,10)
+	x = tmp[:, :-1]
+	y = tmp[:,-1].reshape((-1, 1))
+	ret = data_spliter(x, y, 0.42)
+	print(ret)
+	print(list(map(np.shape, ret))) 
+
 if __name__ == "__main__":
-	ex1()
+	ex3()

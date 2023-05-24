@@ -67,5 +67,21 @@ def ex1():
 	theta2 = np.array([0,0,0,0]).reshape((-1, 1))
 	print(gradient(x, y, theta2)) # Output: array([[ -0.71428571], [ 0.85714286], [23.28571429], [-26.42857143]])
 
+def ex2():
+	x = np.ones(10).reshape(-1,1)
+	y = np.ones(10).reshape(-1,1)
+	theta = np.array([[1], [1]])
+	print(gradient(x, y, theta)) # Output: array([[1], [1]])
+
+	x = (np.arange(1,25)).reshape(-1,2)
+	y = np.arange(1,13).reshape(-1,1)
+	theta = np.array([[3],[2],[1]])
+	print(gradient(x, y, theta)) # Output: array([[33.5], [521.16666667], [554.66666667]])
+
+	x = (np.arange(1,13)).reshape(-1,3)
+	y = np.arange(9,13).reshape(-1,1)
+	theta = np.array([[5],[4],[-2],[1]])
+	print(gradient(x, y, theta)) # Output: array([[ 11. ], [ 90.5], [101.5], [112.5]])
+
 if __name__ == "__main__":
-	ex1()
+	ex2()
