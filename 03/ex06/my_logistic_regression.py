@@ -119,7 +119,7 @@ class MyLogisticRegression():
 		if self.thetas.ndim == 1 and self.thetas.size == x.shape[1] + 1:
 			self.thetas = self.thetas.reshape(x.shape[1] + 1, 1)
 		elif not (self.thetas.ndim == 2 and self.thetas.shape == (x.shape[1] + 1, 1)):
-			print(f"p Invalid input: wrong shape of {self.thetas}", self.thetas.shape)
+			print(f"Invalid input: wrong shape of {self.thetas}", self.thetas.shape)
 			return None
 	
 		X = np.hstack((np.ones((x.shape[0], 1)), x))
