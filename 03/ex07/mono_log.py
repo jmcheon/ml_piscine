@@ -56,7 +56,7 @@ def data_spliter_by(x, y, zipcode):
 	y_ = np.zeros(y.shape)
 	y_[np.where(y == int(zipcode))] = 1
 	y_labelled = y_.reshape(-1, 1)
-	print("y_labelled shape:", y_labelled.shape)
+	#print("y_labelled shape:", y_labelled.shape)
 	#print("y_labelled[:5]:", y_labelled[:5])
 	return data_spliter(x, y_labelled, 0.8)
 
@@ -99,7 +99,7 @@ def plot_scatter_of_each_pair(x_features):
 
 	for i, (f1, f2) in enumerate(feature_pairs):
 		plt.scatter(x_test[:, f1], x_test[:, f2], c=y_hat, cmap='viridis', vmin=0, vmax=1)
-		plt.title(f'Scatter Plot: {x_features[f1]} vs {x_features[f2]} with Predictions')
+		plt.title(f'{x_features[f1]} vs {x_features[f2]} with Predictions')
 		plt.xlabel(x_features[f1])
 		plt.ylabel(x_features[f2])
 		plt.colorbar(label='Degree (0-1)')
@@ -136,13 +136,13 @@ if __name__ == "__main__":
 
 	# 4. Train a logistic model to predict if a citizen comes from your favorite planet or not, using your brand new label.
 	thetas = np.random.rand(x.shape[1] + 1, 1)
-	mylr = MyLR(thetas, 1e-2, 100000)
-	mylr.fit_(x_train, y_train)
-	y_hat = mylr.predict_(x_test)
+	classifier = MyLR(thetas, 1e-2, 100000)
+	classifier.fit_(x_train, y_train)
+	y_hat = classifier.predict_(x_test)
 	print(f"\nHyperparameters:")
 	print("thetas (original):", thetas)
-	print("thetas (optimized):", mylr.thetas)
-	print("loss:", mylr.loss_(y_test, y_hat))
+	print("thetas (optimized):", classifier.thetas)
+	print("loss:", classifier.loss_(y_test, y_hat))
 
 	# 5. Calculate and display the fraction of correct predictions over the total number of predictions based on the test set.
 	threshold = 0.5
@@ -155,6 +155,6 @@ if __name__ == "__main__":
 
 	# 6. Plot 3 scatter plots (one for each pair of citizen features) with the dataset and the final prediction of the model.
 	plot_logistic(x_features)
-	#plot_logistic_with_scatter(x_features)
-	#plot_scatter_of_each_pair(x_features)
-	#plot_all_scatters_of_each_pair(x_features)
+	plot_logistic_with_scatter(x_features)
+	plot_scatter_of_each_pair(x_features)
+	plot_all_scatters_of_each_pair(x_features)

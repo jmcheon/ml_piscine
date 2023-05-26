@@ -71,7 +71,7 @@ def plot_all_scatters_of_each_pair(x_features, y_hat):
 	fig, axes = plt.subplots(len(feature_pairs), 1, figsize=(8, 6 * len(feature_pairs)))
 	for i, (f1, f2) in enumerate(feature_pairs):
 		ax = axes[i]
-		ax.scatter(x_test[:, f1], x_test[:, f2], c=y_hat, cmap='viridis')
+		ax.scatter(x_test[:, f1], x_test[:, f2], c=y_hat, cmap='viridis', vmin=0, vmax=1)
 		ax.set_title(f"{x_features[f1]} vs {x_features[f2]}")
 		ax.set_xlabel(x_features[f1])
 		ax.set_ylabel(x_features[f2])
@@ -134,15 +134,15 @@ def benchmark(x_features):
 	with open(filename, 'wb') as file:
         	pickle.dump(classifiers, file)
 
-def classify_citizen(classifiers, citizen, planet):
-	print(f"\nclassify citizen: {citizen}, real zipcode: {int(planet)}")
+def classify_citizen(classifiers, citizen, matching_planet):
+	print(f"\nclassify citizen: {citizen}, real zipcode: {int(matching_planet)}")
 	for zipcode in range(4):
 		probability = classifiers[zipcode].predict_(citizen.reshape(1, -1))
-		print(f"probability for {zipcode}: {float(probability) * 100:.2f}%")
+		print(f"probability for zipcode {zipcode}: {float(probability) * 100:.2f}%")
 
 def print_classifier_info(classifiers):
 	for classifier in classifiers:
-		print("classifier:", classifier)
+		print("Classifier:", classifier)
 		print("Thetas:", classifier.thetas)
 		print("Alpha:", classifier.alpha)
 		print("Max Iterations:", classifier.max_iter)
@@ -152,7 +152,7 @@ if __name__ == "__main__":
 	# 1. Split the dataset into a training and a test set.
 	x, y, x_features = load_data()
 	#print("normalized x\n:", x[:5], x.shape)
-	#print("normalized y\n:", y[:5], y.shape)
+	#print("y\n:", y[:5], y.shape)
 	x_train, x_test, y_train, y_test = data_spliter(x, y, 0.8)
 
 	# 2. Train 4 logistic regression classifiers to discriminate each class from the others (the way you did in part one).
@@ -168,7 +168,7 @@ if __name__ == "__main__":
 		classifiers.append(classifier)
 
 		probability = classifier.predict_(x_test)
-	# 4. Calculate and display the fraction of correct predictions over the total number of predictions based on the test set.
+		# 4. Calculate and display the fraction of correct predictions over the total number of predictions based on the test set.
 		binary_predictions = (probability >= 0.5).astype(int)
 		#print("binary_predictions:", binary_predictions[:5], binary_predictions.shape)
 		predictions[np.where(binary_predictions == 1)] = zipcode
@@ -186,5 +186,5 @@ if __name__ == "__main__":
 
 	# 5. Plot 3 scatter plots (one for each pair of citizen features) with the dataset and the final prediction of the model.
 	plot_logistic(x_features, probability)
-	#plot_scatter_of_each_pair(x_features, probability)
-	#plot_all_scatters_of_each_pair(x_features, probability)
+	plot_scatter_of_each_pair(x_features, probability)
+	plot_all_scatters_of_each_pair(x_features, probability)
