@@ -46,7 +46,7 @@ def reg_loss_(y, y_hat, theta, lambda_):
 		return None
 
 	if not isinstance(lambda_, float):
-		print(f"Invalid input: argument {v} of ndarray type required")  
+		print(f"Invalid input: argument lambda_ of float type required")  
 		return None
 
 	loss = np.dot((y_hat - y).T, (y_hat - y)) + lambda_ * (float(np.sum(theta[1:].T.dot(theta[1:]))))
