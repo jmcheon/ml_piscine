@@ -12,8 +12,9 @@
 You must implement the following formulas as a functions for the **logistic regression hypothesis**:
 
 #### Iterative
-$$\nabla (J)_0 = \frac{1}{m}\sum_{i=1}^{m}(h_\theta(x^{(i)}) - y^{(i)})$$
-$$\nabla (J)_j = \frac{1}{m}(\sum_{i=1}^{m}(h_\theta(x^{(i)}) - y^{(i)})x_j^{(i)} + \lambda\theta_j) \quad \text {for } j = 1, \dots, n$$
+$$\nabla (J)_0 = \frac{1}{m}\sum(h_θ(x^{(i)}) - y^{(i)})$$
+
+$$\nabla (J)_j = \frac{1}{m}(\sum(h_θ(x^{(i)}) - y^{(i)})x_j^{(i)} + \lambda θ_j) \quad \text {for } j = 1, \dots, n$$
 
 Where:
 
