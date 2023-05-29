@@ -22,10 +22,36 @@ class MyRidge():
 			else:
 				self.thetas = thetas
 
-	def get_params_():
-		pass
-	def set_params_(self, thetas, alpha, max_iter, lambda_):
-		pass
+	def get_params_(self):
+		return self.__dict__
+
+	def set_params_(self, thetas=None, alpha=None, max_iter=None, lambda_=None):
+		if thetas is not None:
+			if not isinstance(thetas, np.ndarray):
+				print("Invalid value for thetas. Expected a ndarray.")
+				return None
+			if thetas.shape != self.thetas.shape:
+				print(f"Invalid shape for thetas. Expected shape: {self.thetas.shape}.")
+				return None
+			self.thetas = thetas
+		
+		if alpha is not None:
+			if not isinstance(alpha, float) or alpha <= 0:
+				print("Invalid value for alpha. Expected a positive float.")
+				return None
+			self.alpha = alpha
+		
+		if max_iter is not None:
+			if not isinstance(max_iter, int) or max_iter <= 0:
+				print("Invalid value for max_iter. Expected a positive integer.")
+				return None
+			self.max_iter = max_iter
+		
+		if lambda_ is not None:
+			if not isinstance(lambda_, float) or lambda_ < 0:
+				print("Invalid value for lambda_. Expected a non-negative float.")
+				return None
+			self.lambda_ = lambda_
 
 	@staticmethod
 	def check_validation(thetas, alpha, max_iter, lambda_):
@@ -33,16 +59,16 @@ class MyRidge():
 			print(f"Invalid input: argument theta of ndarray type required")	
 			return False
 
-		if not isinstance(alpha, float):
-			print(f"Invalid input: argument alpha of float type required")	
+		if not isinstance(alpha, float) or alpha <= 0:
+			print(f"Invalid input: argument alpha of positive float type required")	
 			return False
 
-		if not isinstance(max_iter, int):
-			print(f"Invalid input: argument max_iter of int type required")	
+		if not isinstance(max_iter, int) or max_iter <= 0:
+			print(f"Invalid input: argument max_iter of positive integer type required")	
 			return False 
 
-		if not isinstance(lambda_, float):
-			print(f"Invalid input: argument lambda_ of float type required")
+		if not isinstance(lambda_, float) or lambda_ < 0:
+			print(f"Invalid input: argument lambda_ of non-negative float type required")
 			return False
 
 		return True
@@ -264,6 +290,8 @@ def ex2():
 	mylr.fit_(x, y)
 	# Example 0:
 	print(mylr.thetas) # Output: array([[41.99..],[0.97..], [0.77..], [-1.20..]])
+	print(mylr.set_params_(lambda_=2.0))
+	print(mylr.get_params_())
 
 if __name__ == "__main__":
 	ex2()
