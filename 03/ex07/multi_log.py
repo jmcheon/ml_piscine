@@ -98,7 +98,7 @@ def benchmark_train(zipcode, x_train, x_test, y_train, y_test):
 	
 	# Perform grid search to find the best hyperparameters
 	for thetas, alpha, max_iter in itertools.product(thetas_range, alpha_range, max_iter_range):
-		# Initialize and train the linear regression classifier
+		# Initialize and train the logistic regression classifier
 		classifier = MyLR(thetas, alpha, max_iter)
 		classifier.fit_(x_train, y_train)
 		# Evaluate the classifier on the test set
@@ -130,7 +130,7 @@ def benchmark(x_features):
 		x_train, x_test, y_train, y_test = data_spliter_by(x, y, zipcode)
 		classifiers[zipcode] = benchmark_train(zipcode, x_train, x_test, y_train, y_test)
 
-	filename = "classifiers.pickle"
+	filename = "models.pickle"
 	with open(filename, 'wb') as file:
         	pickle.dump(classifiers, file)
 
@@ -154,7 +154,8 @@ if __name__ == "__main__":
 	#print("normalized x\n:", x[:5], x.shape)
 	#print("y\n:", y[:5], y.shape)
 	x_train, x_test, y_train, y_test = data_spliter(x, y, 0.8)
-
+	
+	benchmark(x_features)
 	# 2. Train 4 logistic regression classifiers to discriminate each class from the others (the way you did in part one).
 	# Train separate logistic regression classifiers
 	classifiers = []
