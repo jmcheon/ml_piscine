@@ -155,7 +155,7 @@ if __name__ == "__main__":
 	#print("y\n:", y[:5], y.shape)
 	x_train, x_test, y_train, y_test = data_spliter(x, y, 0.8)
 	
-	benchmark(x_features)
+	#benchmark(x_features)
 	# 2. Train 4 logistic regression classifiers to discriminate each class from the others (the way you did in part one).
 	# Train separate logistic regression classifiers
 	classifiers = []

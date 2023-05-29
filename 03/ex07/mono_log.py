@@ -155,6 +155,6 @@ if __name__ == "__main__":
 
 	# 6. Plot 3 scatter plots (one for each pair of citizen features) with the dataset and the final prediction of the model.
 	plot_logistic(x_features)
-	plot_logistic_with_scatter(x_features)
-	plot_scatter_of_each_pair(x_features)
-	plot_all_scatters_of_each_pair(x_features)
+	#plot_logistic_with_scatter(x_features)
+	#plot_scatter_of_each_pair(x_features)
+	#plot_all_scatters_of_each_pair(x_features)

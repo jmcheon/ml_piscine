@@ -21,7 +21,13 @@ def accuracy_score_(y, y_hat):
 			print(f"Invalid input: argument {v} of ndarray type required")
 			return None
 
-	if len(y) != len(y_hat):
+	if y.shape != y_hat.shape:
+		print("Invalid input: y and y_hat must have the same shape.")
+		return None
+
+	# Check if the input arrays contain binary and continuous targets
+	if not (np.array_equal(np.unique(y), [0, 1]) and np.all(np.logical_or(y_hat == 0, y_hat == 1))):
+		print("Invalid input: y and y_hat must contain binary values.")
 		return None
 
 	correct_predictions = np.sum(y == y_hat)
@@ -53,11 +59,20 @@ def precision_score_(y, y_hat, pos_label=1):
 		print(f"Invalid input: argument pos_label of str or int type required")
 		return None
 
-	if len(y) != len(y_hat):
+	if y.shape != y_hat.shape:
+		print("Invalid input: y and y_hat must have the same shape.")
+		return None
+
+	# Check if the input arrays contain binary and continuous targets
+	if not (np.array_equal(np.unique(y), [0, 1]) and np.all(np.logical_or(y_hat == 0, y_hat == 1))):
+		print("Invalid input: y and y_hat must contain binary values.")
 		return None
 
 	true_positives = np.sum((y == pos_label) & (y_hat == pos_label))
 	predicted_positives = np.sum(y_hat == pos_label)
+	if predicted_positives == 0:
+		print(f"UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples.")
+		return None
 	precision = true_positives / predicted_positives
 	return float(precision)
 
@@ -87,6 +102,7 @@ def recall_score_(y, y_hat, pos_label=1):
 		return None
 
 	if len(y) != len(y_hat):
+		print("recall_score invalid input: wrong shape of y and y_hat:", y.shape, y_hat.shape)
 		return None
 
 	true_positives = np.sum((y == pos_label) & (y_hat == pos_label))
@@ -120,6 +136,7 @@ def f1_score_(y, y_hat, pos_label=1):
 		return None
 
 	if len(y) != len(y_hat):
+		print("f1_score invalid input: wrong shape of y and y_hat:", y.shape, y_hat.shape)
 		return None
 
 	precision = precision_score_(y, y_hat, pos_label)
@@ -206,7 +223,55 @@ def ex3():
 	## sklearn implementation
 	print("real:", f1_score(y, y_hat, pos_label='norminet')) ## Output: 0.5714285714285715
 
+def binary_continuous_target_test():
+	print("\nExample for binary_continuous_target_test")
+	y_hat = np.random.rand(8, 1).reshape((-1, 1))
+	y = np.array([1, 0, 0, 1, 0, 1, 0, 0]).reshape((-1, 1))
+	print("y_hat:", y_hat, y_hat.shape)
+
+	lst_funcs_name = ["Accuracy", "Precision", "Recall", "F1-score"]
+	lst_my_funcs = [accuracy_score_, precision_score_, recall_score_, f1_score_]
+	lst_sklearn_funcs = [accuracy_score, precision_score, recall_score, f1_score]
+
+	for i in range(len(lst_my_funcs)):
+		print(lst_funcs_name[i])
+		print("mine:", lst_my_funcs[i](y, y_hat))
+		print("real:", lst_sklearn_funcs[i](y, y_hat))
+
+def zero_prediction_test():
+	print("\nExample for zero_prediction_test")
+	y_hat = np.zeros(8).reshape((-1, 1))
+	y = np.array([1, 0, 0, 1, 0, 1, 0, 0]).reshape((-1, 1))
+	print("y_hat:", y_hat, y_hat.shape)
+
+	lst_funcs_name = ["Accuracy", "Precision", "Recall", "F1-score"]
+	lst_my_funcs = [accuracy_score_, precision_score_, recall_score_, f1_score_]
+	lst_sklearn_funcs = [accuracy_score, precision_score, recall_score, f1_score]
+
+	for i in range(len(lst_my_funcs)):
+		print(lst_funcs_name[i])
+		print("mine:", lst_my_funcs[i](y, y_hat))
+		print("real:", lst_sklearn_funcs[i](y, y_hat))
+
+def empty_array_test():
+	print("\nExample for empty_array_test")
+	y_hat = np.zeros(8).reshape((-1, 1))
+	y = np.array([]).reshape((-1, 1))
+	print("y_hat:", y_hat, y_hat.shape)
+
+	lst_funcs_name = ["Accuracy", "Precision", "Recall", "F1-score"]
+	lst_my_funcs = [accuracy_score_, precision_score_, recall_score_, f1_score_]
+	lst_sklearn_funcs = [accuracy_score, precision_score, recall_score, f1_score]
+
+	for i in range(len(lst_my_funcs)):
+		print(lst_funcs_name[i])
+		print("mine:", lst_my_funcs[i](y, y_hat))
+		#print("real:", lst_sklearn_funcs[i](y, y_hat))
+
 if __name__ == "__main__":
-	ex1()
-	ex2()
-	ex3()
+	#ex1()
+	#ex2()
+	#ex3()
+	#binary_continuous_target_test()
+	#zero_prediction_test()
+	empty_array_test()
