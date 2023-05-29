@@ -65,5 +65,26 @@ def ex1():
 	theta3 = np.array([[-2.4], [-1.5], [0.3], [-1.4], [0.7]])
 	print(vec_log_gradient(x3, y3, theta3)) # Output: array([[-0.55711039], [-0.90334809], [-2.01756886], [-2.10071291], [-3.27257351]])
 
+def ex2():
+	x=np.array([[0, 0], [0, 0]])
+	y=np.array([[0], [0]])
+	theta=np.array([[0], [0], [0]])
+	print(log_gradient(x, y, theta)) # array([[0.5], [0], [0]])
+	
+	x=np.array([[1, 1], [1, 1]])
+	y=np.array([[0], [0]])
+	theta=np.array([[1], [0], [0]])
+	print(log_gradient(x, y, theta)) # array([[0.73105858], [0.73105858], [0.73105858]]).
+	
+	x=np.array([[1, 1], [1, 1]])
+	y=np.array([[1], [1]])
+	theta=np.array([[1], [0], [0]])
+	print(log_gradient(x, y, theta)) # array([[-0.2689414213], [-0.2689414213], [-0.2689414213]]).
+	
+	x=np.array([[1, 1], [1, 1]])
+	y=np.array([[0], [0]])
+	theta=np.array([[1], [1], [1]])
+	print(log_gradient(x, y, theta)) # array([[0.95257412682], [0.95257412682], [0.95257412682]]).
+
 if __name__ == "__main__":
 	ex1()

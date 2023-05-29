@@ -62,5 +62,26 @@ def ex1(df_option=False):
 		print("mine:", confusion_matrix_(y, y_hat, df_option=True))
 		print("mine:", confusion_matrix_(y, y_hat, labels=['bird', 'dog'], df_option=True))
 
+def ex2():
+	y_true=np.array(['a', 'b', 'c'])
+	y_hat=np.array(['a', 'b', 'c'])
+	print("mine:", confusion_matrix_(y_true, y_hat))
+	print("real:", confusion_matrix(y_true, y_hat))
+
+	y_true=np.array(['a', 'b', 'c'])
+	y_hat=np.array(['c', 'a', 'b'])
+	print("mine:", confusion_matrix_(y_true, y_hat))
+	print("real:", confusion_matrix(y_true, y_hat))
+
+	y_true=np.array(['a', 'a', 'a'])
+	y_hat=np.array(['a', 'a', 'a'])
+	print("mine:", confusion_matrix_(y_true, y_hat))
+	print("real:", confusion_matrix(y_true, y_hat))
+
+	y_true=np.array(['a', 'a', 'a'])
+	y_hat=np.array(['a', 'a', 'a'])
+	print("mine:", confusion_matrix_(y_true, y_hat, labels=[]))
+	# print("real:", confusion_matrix(y_true, y_hat, labels=[]))
+
 if __name__ == "__main__":
 	ex1()

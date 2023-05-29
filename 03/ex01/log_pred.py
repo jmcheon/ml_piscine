@@ -50,5 +50,22 @@ def ex1():
 	theta3 = np.array([[-2.4], [-1.5], [0.3], [-1.4], [0.7]])
 	print(logistic_predict_(x3, theta3)) # Output: array([[0.03916572], [0.00045262], [0.2890505 ]])
 
+def ex2():
+	x=np.array([0]).reshape(-1, 1)
+	theta=np.array([[0], [0]])
+	print(logistic_predict_(x, theta)) # np.array([[0.5]])
+
+	x=np.array([1]).reshape(-1, 1)
+	theta=np.array([[1], [1]])
+	print(logistic_predict_(x, theta)) # array([[0.880797077978]])
+
+	x=np.array([[1, 0], [0, 1]])
+	theta=np.array([[1], [2], [3]])
+	print(logistic_predict_(x, theta)) # array([[0.952574126822], [0.982013790038]])
+
+	x=np.array([[1, 1], [1, 1]])
+	theta=np.array([[1], [2], [3]])
+	print(logistic_predict_(x, theta)) # array([[0.997527376843], [0.997527376843]])
+
 if __name__ == "__main__":
 	ex1()

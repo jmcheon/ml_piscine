@@ -68,5 +68,31 @@ def ex1():
 	y_hat3 = logistic_predict_(x3, theta3)
 	print(vec_log_loss_(y3, y_hat3)) # Output: 2.993853310859968
 
+def ex2():
+	y=np.array([[0], [0]])
+	y_hat=np.array([[0], [0]]) 
+	eps=1e-15	
+	print(log_loss_(y, y_hat)) # a value very closed to 0 (something around 1e-15).
+
+	y=np.array([[0], [1]])
+	y_hat=np.array([[0], [1]]) 
+	eps=1e-15	
+	print(log_loss_(y, y_hat)) # a very small value closed to 0 (something around 1e-15).
+
+	y=np.array([[0], [0], [0]])
+	y_hat=np.array([[1], [0], [0]])
+	eps=1e-15
+	print(log_loss_(y, y_hat)) # 11.51292546.
+
+	y=np.array([[0], [0], [0]])
+	y_hat=np.array([[1], [0], [1]]) 
+	eps=1e-15
+	print(log_loss_(y, y_hat)) # 23.02585093.
+
+	y=np.array([[0], [1], [0]])
+	y_hat=np.array([[1], [0], [1]])
+	eps=1e-15
+	print(log_loss_(y, y_hat)) # 34.53877639.
+
 if __name__ == "__main__":
 	ex1()
