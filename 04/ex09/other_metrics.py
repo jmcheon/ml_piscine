@@ -25,10 +25,16 @@ def accuracy_score_(y, y_hat):
 		print("Invalid input: y and y_hat must have the same shape.")
 		return None
 
-	# Check if the input arrays contain binary and continuous targets
-	if not (np.array_equal(np.unique(y), [0, 1]) and np.all(np.logical_or(y_hat == 0, y_hat == 1))):
-		print("Invalid input: y and y_hat must contain binary values.")
-		return None
+    # Check if y and y_hat are numeric arrays
+	if np.issubdtype(y.dtype, np.number) and np.issubdtype(y_hat.dtype, np.number):
+        # Check if y and y_hat are binary arrays
+		if not (np.array_equal(np.unique(y), [0, 1]) and np.all(np.logical_or(y_hat == 0, y_hat == 1))):
+			print("Invalid input: y and y_hat must contain binary values.")
+			return None
+    # Check if y and y_hat are string arrays
+	elif not np.issubdtype(y.dtype, str) and np.issubdtype(y_hat.dtype, str):
+        # Continue with your code for calculating the precision score for string arrays
+		print("Invalid input: y and y_hat should be numeric arrays or string arrays.")
 
 	correct_predictions = np.sum(y == y_hat)
 	accuracy = correct_predictions / len(y)
@@ -63,11 +69,22 @@ def precision_score_(y, y_hat, pos_label=1):
 		print("Invalid input: y and y_hat must have the same shape.")
 		return None
 
-	# Check if the input arrays contain binary and continuous targets
-	if not (np.array_equal(np.unique(y), [0, 1]) and np.all(np.logical_or(y_hat == 0, y_hat == 1))):
-		print("Invalid input: y and y_hat must contain binary values.")
-		return None
-
+   	# Check if y and y_hat are numeric arrays
+	if np.issubdtype(y.dtype, np.number) and np.issubdtype(y_hat.dtype, np.number):
+        # Check if y and y_hat are binary arrays
+		if not (np.array_equal(np.unique(y), [0, 1]) and np.all(np.logical_or(y_hat == 0, y_hat == 1))):
+			print("Invalid input: y and y_hat must contain binary values.")
+			return None
+    # Check if y and y_hat are string arrays
+	elif np.issubdtype(y.dtype, str) and np.issubdtype(y_hat.dtype, str):
+		is_valid_pos_label = np.isin(pos_label, y) and np.isin(pos_label, y_hat)
+		valid_labels = np.unique(np.concatenate((y, y_hat)))
+		if not is_valid_pos_label:
+			print(f"Invalid input: pos_label={pos_label} is not a valid label. It should be one of {valid_labels}")
+			return None
+	else:
+		print("Invalid input: y and y_hat should be numeric arrays or string arrays.")
+	
 	true_positives = np.sum((y == pos_label) & (y_hat == pos_label))
 	predicted_positives = np.sum(y_hat == pos_label)
 	if predicted_positives == 0:
@@ -101,9 +118,26 @@ def recall_score_(y, y_hat, pos_label=1):
 		print(f"Invalid input: argument pos_label of str or int type required")
 		return None
 
-	if len(y) != len(y_hat):
-		print("recall_score invalid input: wrong shape of y and y_hat:", y.shape, y_hat.shape)
+	if y.shape != y_hat.shape:
+		print("Invalid input: y and y_hat must have the same shape.")
 		return None
+
+    # Check if y and y_hat are numeric arrays
+	if np.issubdtype(y.dtype, np.number) and np.issubdtype(y_hat.dtype, np.number):
+        # Check if y and y_hat are binary arrays
+		if not (np.array_equal(np.unique(y), [0, 1]) and np.all(np.logical_or(y_hat == 0, y_hat == 1))):
+			print("Invalid input: y and y_hat must contain binary values.")
+			return None
+    # Check if y and y_hat are string arrays
+	elif np.issubdtype(y.dtype, str) and np.issubdtype(y_hat.dtype, str):
+		is_valid_pos_label = np.isin(pos_label, y) and np.isin(pos_label, y_hat)
+		valid_labels = np.unique(np.concatenate((y, y_hat)))
+		if not is_valid_pos_label:
+			print(f"Invalid input: pos_label={pos_label} is not a valid label. It should be one of {valid_labels}")
+			return None
+	else:
+		print("Invalid input: y and y_hat should be numeric arrays or string arrays.")
+	
 
 	true_positives = np.sum((y == pos_label) & (y_hat == pos_label))
 	actual_positives = np.sum(y == pos_label)
@@ -135,12 +169,30 @@ def f1_score_(y, y_hat, pos_label=1):
 		print(f"Invalid input: argument pos_label of str or int type required")
 		return None
 
-	if len(y) != len(y_hat):
-		print("f1_score invalid input: wrong shape of y and y_hat:", y.shape, y_hat.shape)
+	if y.shape != y_hat.shape:
+		print("Invalid input: y and y_hat must have the same shape.")
 		return None
 
+    # Check if y and y_hat are numeric arrays
+	if np.issubdtype(y.dtype, np.number) and np.issubdtype(y_hat.dtype, np.number):
+        # Check if y and y_hat are binary arrays
+		if not (np.array_equal(np.unique(y), [0, 1]) and np.all(np.logical_or(y_hat == 0, y_hat == 1))):
+			print("Invalid input: y and y_hat must contain binary values.")
+			return None
+    # Check if y and y_hat are string arrays
+	elif np.issubdtype(y.dtype, str) and np.issubdtype(y_hat.dtype, str):
+		is_valid_pos_label = np.isin(pos_label, y) and np.isin(pos_label, y_hat)
+		valid_labels = np.unique(np.concatenate((y, y_hat)))
+		if not is_valid_pos_label:
+			print(f"Invalid input: pos_label={pos_label} is not a valid label. It should be one of {valid_labels}")
+			return None
+	else:
+		print("Invalid input: y and y_hat should be numeric arrays or string arrays.")
+	
 	precision = precision_score_(y, y_hat, pos_label)
 	recall = recall_score_(y, y_hat, pos_label)
+	if precision == None or recall == None:
+		return None
 	f1_score = 2 * (precision * recall) / (precision + recall)
 	return float(f1_score)
 
@@ -236,13 +288,13 @@ def binary_continuous_target_test():
 	for i in range(len(lst_my_funcs)):
 		print(lst_funcs_name[i])
 		print("mine:", lst_my_funcs[i](y, y_hat))
-		print("real:", lst_sklearn_funcs[i](y, y_hat))
+		# print("real:", lst_sklearn_funcs[i](y, y_hat))
 
 def zero_prediction_test():
 	print("\nExample for zero_prediction_test")
 	y_hat = np.zeros(8).reshape((-1, 1))
 	y = np.array([1, 0, 0, 1, 0, 1, 0, 0]).reshape((-1, 1))
-	print("y_hat:", y_hat, y_hat.shape)
+	#print("y_hat:", y_hat, y_hat.shape)
 
 	lst_funcs_name = ["Accuracy", "Precision", "Recall", "F1-score"]
 	lst_my_funcs = [accuracy_score_, precision_score_, recall_score_, f1_score_]
@@ -251,27 +303,21 @@ def zero_prediction_test():
 	for i in range(len(lst_my_funcs)):
 		print(lst_funcs_name[i])
 		print("mine:", lst_my_funcs[i](y, y_hat))
-		print("real:", lst_sklearn_funcs[i](y, y_hat))
+		# print("real:", lst_sklearn_funcs[i](y, y_hat))
 
-def empty_array_test():
-	print("\nExample for empty_array_test")
-	y_hat = np.zeros(8).reshape((-1, 1))
-	y = np.array([]).reshape((-1, 1))
-	print("y_hat:", y_hat, y_hat.shape)
+def invalid_label_test():
+	print("\nExample for invalid_label_test")
+	y_hat = np.array(['norminet', 'dog', 'norminet', 'norminet', 'dog', 'dog', 'dog', 'dog'])
+	y = np.array(['dog', 'dog', 'norminet', 'norminet', 'dog', 'norminet', 'dog', 'norminet'])
 
-	lst_funcs_name = ["Accuracy", "Precision", "Recall", "F1-score"]
-	lst_my_funcs = [accuracy_score_, precision_score_, recall_score_, f1_score_]
-	lst_sklearn_funcs = [accuracy_score, precision_score, recall_score, f1_score]
-
-	for i in range(len(lst_my_funcs)):
+	for i in range(1, len(lst_my_funcs)):
 		print(lst_funcs_name[i])
-		print("mine:", lst_my_funcs[i](y, y_hat))
-		#print("real:", lst_sklearn_funcs[i](y, y_hat))
+		print("mine:", lst_my_funcs[i](y, y_hat, pos_label='none'))
+	# 	print("real:", lst_sklearn_funcs[i](y, y_hat, pos_label='none'))
 
 if __name__ == "__main__":
-	#ex1()
-	#ex2()
-	#ex3()
-	#binary_continuous_target_test()
-	#zero_prediction_test()
-	empty_array_test()
+	ex1()
+	ex2()
+	ex3()
+	# binary_continuous_target_test()
+	# zero_prediction_test()

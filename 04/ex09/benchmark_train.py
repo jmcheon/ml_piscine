@@ -51,7 +51,7 @@ def data_spliter_by(x, y, zipcode):
 	#print("y_labelled[:5]:", y_labelled[:5])
 	return data_spliter(x, y_labelled, 0.8)
 
-def benchmark_train(degree, zipcode, x_train, x_test, y_train, y_test):
+def benchmark_train(degree, zipcode, x_train_poly, x_cv_poly, y_train, y_cv):
 	# Initialize variables to store the best hyperparameters and evaluation metric
 	best_classifier = None
 	best_hyperparameters = {'thetas': None, 'alpha': None, 'max_iter': None, 'lambda': None}
@@ -59,37 +59,38 @@ def benchmark_train(degree, zipcode, x_train, x_test, y_train, y_test):
 	best_loss = float('inf')
 	
 	# Define the range of hyperparameter values to search
-	thetas_range = [np.zeros((x_train.shape[1] + 1, 1)), np.random.rand(x_train.shape[1] + 1, 1)]
+	thetas_range = [np.zeros((x_train_poly.shape[1] + 1, 1)), np.random.rand(x_train_poly.shape[1] + 1, 1)]
 	alpha_range = [1e-2, 1e-1]
 	max_iter_range = [10000, 50000]
 	lambda_range = np.linspace(0.0, 1.0, num=3)
 	
 	# Perform grid search to find the best hyperparameters
-	predictions = np.zeros(y_test.shape)
+	predictions = np.zeros(y_cv.shape)
 	for thetas, alpha, max_iter, lambda_ in itertools.product(thetas_range, alpha_range, max_iter_range, lambda_range):
 		# Initialize and train the logistic regression classifier
 		classifier = MyLR(thetas, alpha, max_iter, lambda_=lambda_)
-		classifier.fit_(x_train, y_train)
+		classifier.fit_(x_train_poly, y_train)
 
 		# Evaluate the classifier on the test set
-		probability = classifier.predict_(x_test)
+		probability = classifier.predict_(x_cv_poly)
 		binary_predictions = (probability >= 0.5).astype(int)
 		predictions[np.where(binary_predictions == 1)] = 1
-		loss = classifier.loss_(y_test, probability)
-		f1_score_value = f1_score(y_test, predictions)
+		loss = classifier.loss_(y_cv, probability)
+		f1_score_value = f1_score(y_cv, predictions)
 
 		print(f"zipcode: {zipcode}, degree: {degree}, loss: {loss}, f1_score: {f1_score_value}, alpha: {alpha}, max_iter: {max_iter}, lambda: {lambda_}")
 
 		# Update the best hyperparameters if the current classifier performs better
-		if f1_score_value > best_f1_score:
+		if f1_score_value > best_f1_score and loss < best_loss:
 			best_classifier = classifier
+			best_loss = loss 
 			best_f1_score = f1_score_value
 			best_hyperparameters['thetas'] = classifier.thetas
 			best_hyperparameters['alpha'] = alpha
 			best_hyperparameters['max_iter'] = max_iter
 			best_hyperparameters['lambda'] = lambda_
 	# Store the classifier and its evaluation metric
-	dict_classifier = {'classifier': best_classifier, 'f1_score': best_f1_score, 'degree': degree}
+	dict_classifier = {'classifier': best_classifier, 'loss': best_loss, 'f1_score': best_f1_score, 'degree': degree}
 
 	# Print the best hyperparameters and f1 score
 	print(f"Best Hyperparameters for zipcode {zipcode}:")
@@ -107,12 +108,13 @@ def benchmark(x_features):
 	for zipcode in range(4):
 		print(f"Current zipcode: {zipcode}")
 		x_train, x_test, y_train, y_test = data_spliter_by(x, y, zipcode)
+		x_train, x_cv, y_train, y_cv = data_spliter_by(x, y, zipcode)
 		for degree in range(1, 4):
 			print(f"Current degree: {degree}")
 			# Create the polynomial features for the current degree
 			x_train_poly = add_polynomial_features(x_train, degree)
-			x_test_poly = add_polynomial_features(x_test, degree)
-			classifiers[zipcode] = benchmark_train(degree, zipcode, x_train_poly, x_test_poly, y_train, y_test)
+			x_cv_poly = add_polynomial_features(x_cv, degree)
+			classifiers[zipcode] = benchmark_train(degree, zipcode, x_train_poly, x_cv_poly, y_train, y_cv)
 
 	filename = "models.pickle"
 	with open(filename, 'wb') as file:
