@@ -66,7 +66,7 @@ def best_hypothesis(x_features, models):
 
 	# 2. Split your space_avocado.csv dataset into a training, a cross-validation and a test sets.
 	x_train, x_test, y_train, y_test = data_spliter(x, y, 0.8)
-	x_train, x_cv, y_train, y_cv = data_spliter(x_train, y_train, 0.8)
+	x_train, x_validation, y_train, y_validation = data_spliter(x_train, y_train, 0.8)
 
 
 	# 3. Evaluate the best model on the test set.

@@ -11,10 +11,10 @@ path = os.path.join(os.path.dirname(__file__), '..', 'ex06')
 sys.path.insert(1, path)
 from ridge import MyRidge
 
-def benchmark_train(degree, x_train_poly, x_cv_ploy, y_train, y_cv):
+def benchmark_train(degree, x_train_poly, x_validation_ploy, y_train, y_validation):
 	# Initialize variables to store the best hyperparameters and evaluation metric
 	best_model = None
-	best_hyperparameters = {'thetas': None, 'alpha': None, 'max_iter': None}
+	best_hyperparameters = {'thetas': None, 'alpha': None, 'max_iter': None, 'lambda': None}
 	best_mse = float('inf')
 	
 	# Define the range of hyperparameter values to search
@@ -29,8 +29,8 @@ def benchmark_train(degree, x_train_poly, x_cv_ploy, y_train, y_cv):
 		model = MyRidge(thetas, alpha, max_iter, lambda_)
 		model.fit_(x_train_poly, y_train)
 		# Evaluate the model on the cross-validation set
-		y_pred = model.predict_(x_cv_ploy)
-		mse = model.mse_(y_cv, y_pred)
+		y_pred = model.predict_(x_validation_ploy)
+		mse = model.mse_(y_validation, y_pred)
 		print(f"degree: {degree}, mse: {mse}, alpha: {alpha}, max_iter: {max_iter}, lambda_: {lambda_}")
 
 		# Update the best hyperparameters if the current model performs better
@@ -40,6 +40,7 @@ def benchmark_train(degree, x_train_poly, x_cv_ploy, y_train, y_cv):
 			best_hyperparameters['thetas'] = model.thetas
 			best_hyperparameters['alpha'] = alpha
 			best_hyperparameters['max_iter'] = max_iter
+			best_hyperparameters['lambda'] = lambda_ 
 
 	# Store the model and its evaluation metric
 	dict_model = {'model': best_model, 'mse': best_mse}
@@ -49,6 +50,7 @@ def benchmark_train(degree, x_train_poly, x_cv_ploy, y_train, y_cv):
 	print("Thetas:", best_hyperparameters['thetas'])
 	print("Alpha:", best_hyperparameters['alpha'])
 	print("Max Iterations:", best_hyperparameters['max_iter'])
+	print("Best lambda:", best_hyperparameters['lambda'])
 	print("Best MSE:", best_mse)
 
 	# Save the model as a pickle file
@@ -72,7 +74,7 @@ def benchmark(x_features):
 
 	# 2. Split your space_avocado.csv dataset into a training, a cross-validation and a test sets.
 	x_train, x_test, y_train, y_test = data_spliter(x, y, 0.8)
-	x_train, x_cv, y_train, y_cv = data_spliter(x_train, y_train, 0.8)
+	x_train, x_validation, y_train, y_validation = data_spliter(x_train, y_train, 0.8)
 
 	# 3. Consider several Linear Regression models with polynomial hypotheses of different degrees of 4
 	# Initialize a dictionary to store the models and their evaluation metrics
@@ -80,8 +82,8 @@ def benchmark(x_features):
 	for degree in range(1, 5):
 		# Create the polynomial features for the current degree
 		x_train_poly = add_polynomial_features(x_train, degree)
-		x_cv_poly = add_polynomial_features(x_cv, degree)
-		models[degree] = benchmark_train(degree, x_train_poly, x_cv_poly, y_train, y_cv)
+		x_validation_poly = add_polynomial_features(x_validation, degree)
+		models[degree] = benchmark_train(degree, x_train_poly, x_validation_poly, y_train, y_validation)
 
 	# Save the models as a pickle file
 	filename = "models.pickle"
