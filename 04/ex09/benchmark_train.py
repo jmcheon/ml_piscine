@@ -1,10 +1,8 @@
 import numpy as np
 import pandas as pd
 import sys, os, itertools, pickle
-import matplotlib.pyplot as plt
 from data_spliter import data_spliter
 from other_metrics import f1_score_
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 path = os.path.join(os.path.dirname(__file__), '..', 'ex00')
 sys.path.insert(1, path)
@@ -76,7 +74,7 @@ def benchmark_train(degree, zipcode, x_train_poly, x_validation_poly, y_train, y
 		binary_predictions = (probability >= 0.5).astype(int)
 		predictions[np.where(binary_predictions == 1)] = 1
 		loss = classifier.loss_(y_validation, probability)
-		f1_score_value = f1_score(y_validation, predictions)
+		f1_score_value = f1_score_(y_validation, predictions)
 
 		print(f"zipcode: {zipcode}, degree: {degree}, loss: {loss}, f1_score: {f1_score_value}, alpha: {alpha}, max_iter: {max_iter}, lambda: {lambda_}")
 
