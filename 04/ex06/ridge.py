@@ -290,7 +290,7 @@ def ex2():
 	mylr.fit_(x, y)
 	# Example 0:
 	print(mylr.thetas) # Output: array([[41.99..],[0.97..], [0.77..], [-1.20..]])
-	print(mylr.set_params_(lambda_=2.0))
+	mylr.set_params_(lambda_=2.0)
 	print(mylr.get_params_())
 
 if __name__ == "__main__":

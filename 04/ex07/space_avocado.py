@@ -95,7 +95,7 @@ def best_hypothesis(x_features, models):
 	# 5. Plot the evaluation curve which help you to select the best model (evaluation metrics vs models + λ factor).
 	mses = [models[degree]['mse'] for degree in degrees]
 	lambda_values = [model_data['model'].lambda_ for degree, model_data in models.items()]
-	print(lambda_values)
+	#print(lambda_values)
 	
 	fig, ax = plt.subplots(1, 2, figsize=(15, 8))
 	ax[0].plot(degrees, mses, marker='o')
