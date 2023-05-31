@@ -44,7 +44,7 @@ def benchmark_train(degree, x_train_poly, x_validation_poly, y_train, y_validati
 	thetas_range = [np.zeros((x_train_poly.shape[1] + 1, 1)), np.random.rand(x_train_poly.shape[1] + 1, 1)]
 	alpha_range = [1e-2]
 	max_iter_range = [50000]
-	lambda_range = np.linspace(0.0, 1.0, num=6)
+	lambda_range = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0] #np.linspace(0.0, 1.0, num=6)
 	
 	models = [] 
 	# Perform grid search to find the best hyperparameters

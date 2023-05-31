@@ -63,14 +63,17 @@ def denormalization(normalized_data, data_min, data_max):
 	denormalized_data = normalized_data * (data_max - data_min) + data_min
 	return denormalized_data
 
-def best_hypothesis(x_features, models):
+def best_hypothesis(data, x_features, models):
 	# 1. Perform min-max normalization by calculating the minimum and maximum values for each feature
 	min_vals = np.min(data, axis=0)
 	max_vals = np.max(data, axis=0)
-	normalized_data = (data - min_vals) / (max_vals - min_vals)
+	normalized_data, data_min, data_max = normalization(data)#= (data - min_vals) / (max_vals - min_vals)
 
-	x = np.array(normalized_data[x_features])
-	y = np.array(normalized_data[['target']])
+
+	#x = np.array(normalized_data[x_features])
+	#y = np.array(normalized_data[['target']])
+	x = normalized_data[:, :len(x_features)]
+	y = normalized_data[:, -1].reshape(-1, 1)
 	print("x:", x.shape)
 	print("y:", y.shape)
 
@@ -88,15 +91,18 @@ def best_hypothesis(x_features, models):
 	for degree, lst_models in models.items():
 		mses = []
 		lambdas = []
-		for model_data in lst_models:
+		for i, model_data in zip(range(len(lst_models)), lst_models):
 			model = model_data['model']
 			x_test_poly = add_polynomial_features(x_test, degree)
 			y_pred = model.predict_(x_test_poly)
-			#y_pred = model.predict_(x_test)
+			denormalized_y_test = denormalization(y_test.reshape(-1 ,1), data_min[-1], data_max[-1])
+			denormalized_y_pred = denormalization(y_pred.reshape(-1, 1), data_min[-1], data_max[-1])
+
+			#mse = model.mse_(denormalized_y_test, denormalized_y_pred)
 			mse = model.mse_(y_test, y_pred)
-			print(degree, mse)
+			#print(degree, mse)
 			mses.append(mse)
-			lambdas.append(model.lambda_)
+			lambdas.append(f"model{(degree - 1) * len(lst_models) + i + 1} + λ{model.lambda_:.1f}")
 			if mse < best_mse:
 				best_model = model
 				best_mse = mse
@@ -104,8 +110,8 @@ def best_hypothesis(x_features, models):
 		dict_mses[degree] = mses
 		dict_lambdas[degree] = lambdas 
 	print(f"Best mse with test set: {best_mse}")
-	print("dict mses:", dict_mses)
-	print("dict_lambdas:", dict_lambdas)
+	#print("dict mses:", dict_mses)
+	#print("dict_lambdas:", dict_lambdas)
 
 	# 4. Determine the best hypothesis based on the evaluation metrics, similar to before.
 	#best_model = min(models.items(), key=lambda x: x[1]['mse'])
@@ -115,25 +121,23 @@ def best_hypothesis(x_features, models):
 	print("best_degree:", best_degree)
 
 	# 5. Plot the evaluation curve which help you to select the best model (evaluation metrics vs models + λ factor).
-	#mses = [models[degree]['mse'] for degree in degrees]
-	#lambda_values = [model_data['model'].lambda_ for degree, model_data in models.items()]
-	lambda_values = [model_data['model'].lambda_ for model_data in lst_models for degree, lst_models in models.items()]
-	lst_models = []
-	for i, lambda_ in zip(range(0, len(lambda_values)), lambda_values):
-		lst_models.append(f"{i + 1}")
-	
+	fig, axes = plt.subplots(2, 1, figsize=(15, 15))
+	fig.tight_layout(pad=15)
+	colors = ['red', 'green', 'blue', 'orange']
 	for i in range(len(degrees)):
-		plt.plot(dict_lambdas[i + 1], dict_mses[i + 1], marker='o', label=f"degree {i}")
-	plt.xlabel("λ Values")
-	plt.ylabel("MSE")
-	plt.title("Evaluation Curve: MSE vs. models(λ Values)")
-	#ax[1].plot(degrees, lambda_values)
-	#ax[1].set_xlabel("Degree")
-	#ax[1].set_ylabel("λ Values")
-	#ax[1].set_title("λ Values vs models(degree)")
-	plt.legend()
-	plt.grid()
+		ax = axes[1]
+		if i < len(degrees) // 2:
+			ax = axes[0]
+		ax.scatter(dict_lambdas[i + 1], dict_mses[i + 1], c=colors[i], label=f"degree {i}")
+		ax.set_xlabel("λ Values")
+		ax.set_ylabel("MSE")
+		ax.set_title("Evaluation Curve: MSE vs. models(λ Values)")
+		ax.legend()
+		ax.grid()
+	plt.setp(axes[0].get_xticklabels(), rotation=90)
+	plt.setp(axes[1].get_xticklabels(), rotation=90)
 	plt.show()
+	
 
 	# 6. Plot the true price and the predicted price obtain via your best model with the different λ values 
 	# (meaning the dataset + the 5 predicted curves).
@@ -193,11 +197,12 @@ def load_models():
 
 if __name__ == "__main__":
 	try:
-		data = pd.read_csv("space_avocado.csv")
+		data = pd.read_csv("space_avocado.csv", index_col=0)
 	except:
 		print("Invalid file error.")
 		sys.exit()
-	x_features = ['weight', 'prod_distance', 'time_delivery']
+	x_features = data.columns.tolist()[:-1] #['weight', 'prod_distance', 'time_delivery']
 	#plot_scatters(x_features)
 	models = load_models()
-	best_hypothesis(x_features, models)
+	print("x features:", x_features)
+	best_hypothesis(data.values, x_features, models)
