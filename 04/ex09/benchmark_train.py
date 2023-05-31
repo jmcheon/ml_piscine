@@ -70,7 +70,9 @@ def benchmark_train(degree, zipcode, x_train_poly, x_validation_poly, y_train, y
 		classifier.fit_(x_train_poly, y_train)
 
 		# Evaluate the classifier on the test set
+		#print(x_validation_poly[:5])
 		probability = classifier.predict_(x_validation_poly)
+		#print(probability[:5])
 		binary_predictions = (probability >= 0.5).astype(int)
 		predictions[np.where(binary_predictions == 1)] = 1
 		loss = classifier.loss_(y_validation, probability)

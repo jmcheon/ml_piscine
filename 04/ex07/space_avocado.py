@@ -53,6 +53,16 @@ def plot_scatters_and_prediction(x_features, x, y ,best_model):
 		plt.legend()
 		plt.show()
 
+def normalization(data):
+	data_min = np.min(data, axis=0)
+	data_max = np.max(data, axis=0)
+	normalized_data = (data - data_min) / (data_max - data_min)
+	return normalized_data, data_min, data_max
+
+def denormalization(normalized_data, data_min, data_max):
+	denormalized_data = normalized_data * (data_max - data_min) + data_min
+	return denormalized_data
+
 def best_hypothesis(x_features, models):
 	# 1. Perform min-max normalization by calculating the minimum and maximum values for each feature
 	min_vals = np.min(data, axis=0)
@@ -73,39 +83,56 @@ def best_hypothesis(x_features, models):
 	best_model = None
 	best_mse = float('inf')
 	best_degree = 0
-	for degree, model_data in models.items():
-		model = model_data['model']
-		x_test_poly = add_polynomial_features(x_test, degree)
-		y_pred = model.predict_(x_test_poly)
-		#y_pred = model.predict_(x_test)
-		mse = model.mse_(y_test, y_pred)
-		if mse < best_mse:
-			best_model = model
-			best_mse = mse
-			best_degree = degree
+	dict_mses = {}
+	dict_lambdas = {}
+	for degree, lst_models in models.items():
+		mses = []
+		lambdas = []
+		for model_data in lst_models:
+			model = model_data['model']
+			x_test_poly = add_polynomial_features(x_test, degree)
+			y_pred = model.predict_(x_test_poly)
+			#y_pred = model.predict_(x_test)
+			mse = model.mse_(y_test, y_pred)
+			print(degree, mse)
+			mses.append(mse)
+			lambdas.append(model.lambda_)
+			if mse < best_mse:
+				best_model = model
+				best_mse = mse
+				best_degree = degree
+		dict_mses[degree] = mses
+		dict_lambdas[degree] = lambdas 
 	print(f"Best mse with test set: {best_mse}")
+	print("dict mses:", dict_mses)
+	print("dict_lambdas:", dict_lambdas)
 
 	# 4. Determine the best hypothesis based on the evaluation metrics, similar to before.
 	#best_model = min(models.items(), key=lambda x: x[1]['mse'])
 	#best_degree = best_model[0]
 	degrees = list(models.keys())
-	best_model = models[best_degree]['model']
+	#best_model = models[best_degree]['model']
 	print("best_degree:", best_degree)
 
 	# 5. Plot the evaluation curve which help you to select the best model (evaluation metrics vs models + λ factor).
-	mses = [models[degree]['mse'] for degree in degrees]
-	lambda_values = [model_data['model'].lambda_ for degree, model_data in models.items()]
-	#print(lambda_values)
+	#mses = [models[degree]['mse'] for degree in degrees]
+	#lambda_values = [model_data['model'].lambda_ for degree, model_data in models.items()]
+	lambda_values = [model_data['model'].lambda_ for model_data in lst_models for degree, lst_models in models.items()]
+	lst_models = []
+	for i, lambda_ in zip(range(0, len(lambda_values)), lambda_values):
+		lst_models.append(f"{i + 1}")
 	
-	fig, ax = plt.subplots(1, 2, figsize=(15, 8))
-	ax[0].plot(degrees, mses, marker='o')
-	ax[0].set_xlabel("Degree")
-	ax[0].set_ylabel("MSE")
-	ax[0].set_title("Evaluation Curve: MSE vs. models(degree)")
-	ax[1].plot(degrees, lambda_values)
-	ax[1].set_xlabel("Degree")
-	ax[1].set_ylabel("λ Values")
-	ax[1].set_title("λ Values vs models(degree)")
+	for i in range(len(degrees)):
+		plt.plot(dict_lambdas[i + 1], dict_mses[i + 1], marker='o', label=f"degree {i}")
+	plt.xlabel("λ Values")
+	plt.ylabel("MSE")
+	plt.title("Evaluation Curve: MSE vs. models(λ Values)")
+	#ax[1].plot(degrees, lambda_values)
+	#ax[1].set_xlabel("Degree")
+	#ax[1].set_ylabel("λ Values")
+	#ax[1].set_title("λ Values vs models(degree)")
+	plt.legend()
+	plt.grid()
 	plt.show()
 
 	# 6. Plot the true price and the predicted price obtain via your best model with the different λ values 
@@ -152,15 +179,16 @@ def load_models():
 		models = pickle.load(file)
 	
 	# Iterate and print the data
-	for degree, model_data in models.items():
+	for degree, lst_models in models.items():
 		print(f"Degree: {degree}")
-		#print("Model:", model_data)
-		print("Thetas:", model_data['model'].thetas)
-		print("Alpha:", model_data['model'].alpha)
-		print("Max Iterations:", model_data['model'].max_iter)
-		print("Lambda:", model_data['model'].lambda_)
-		print("MSE:", model_data['mse'])
-		print()
+		for model_data in lst_models:
+			#print("Model:", model_data)
+			print("Thetas:", model_data['model'].thetas)
+			print("Alpha:", model_data['model'].alpha)
+			print("Max Iterations:", model_data['model'].max_iter)
+			print("Lambda:", model_data['model'].lambda_)
+			print("MSE:", model_data['mse'])
+			print()
 	return models
 
 if __name__ == "__main__":
