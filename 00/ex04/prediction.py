@@ -1,5 +1,4 @@
 import numpy as np
-from tools import add_intercept
 
 def predict_(x, theta):
 	"""
@@ -34,7 +33,7 @@ def predict_(x, theta):
 		print("Invalid input: wrong shape of theta ", theta.shape)
 		return None
 
-	X = add_intercept(x)
+	X = np.hstack((np.ones((x.shape[0], 1)), x))
 	y_hat = X.dot(theta)
 	return np.array(y_hat)
 

@@ -1,7 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from tools import add_intercept
-from loss import loss_
+import sys, os
+
+path = os.path.join(os.path.dirname(__file__), '..', 'ex07')
+sys.path.insert(1, path)
+from vec_loss import loss_
 
 def plot_with_loss(x, y, theta):
 	"""
@@ -45,16 +48,15 @@ def plot_with_loss(x, y, theta):
 		print("Invalid input: wrong shape of theta ", theta.shape)
 		return
 
-	X = add_intercept(x)
+	X = np.hstack((np.ones((x.shape[0], 1)), x))
 	y_hat = X.dot(theta)
 	cost = loss_(y, y_hat.reshape(y_hat.size, 1)) * 2
 
-	fig, ax = plt.subplots()
-	ax.scatter(x, y, color='blue', label='data points')
-	ax.plot(x, y_hat, color='orange', label='prediction line')
+	plt.scatter(x, y, color='blue', label='data points')
+	plt.plot(x, y_hat, color='orange', label='prediction line')
 	for xi, yi, y_hat_i in zip(x, y, y_hat):
 		plt.plot([xi, xi], [yi, y_hat_i], '--', color='red')
-	ax.legend()
+	plt.legend()
 	plt.title(f"Cost : {cost:.6f}")
 	plt.show()
 

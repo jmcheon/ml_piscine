@@ -31,8 +31,7 @@ def loss_(y, y_hat):
 		print(f"Invalid input: shape of vectors should be compatiable.")
 		return None
 
-	squared_errors = (y_hat - y) ** 2
-	return np.sum(squared_errors) / (2 * len(y))
+	return float(np.dot((y_hat - y).T, (y_hat - y)) / (2 * len(y)))
 
 def ex1():
 	X = np.array([[0], [15], [-9], [7], [12], [3], [-21]])

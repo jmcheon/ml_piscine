@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from tools import add_intercept
 
 def plot(x, y, theta):
 	"""
@@ -44,7 +43,7 @@ def plot(x, y, theta):
 		print("Invalid input: wrong shape of theta ", theta.shape)
 		return
 
-	X = add_intercept(x)
+	X = np.hstack((np.ones((x.shape[0], 1)), x))
 	y_hat = X.dot(theta)
 
 	fig, ax = plt.subplots()

@@ -1,4 +1,8 @@
 import numpy as np
+import sys, os
+
+path = os.path.join(os.path.dirname(__file__), '..', 'ex04')
+sys.path.insert(1, path)
 from prediction import predict_
 
 def loss_elem_(y, y_hat):
@@ -65,7 +69,7 @@ def ex1():
 	x1 = np.array([[0.], [1.], [2.], [3.], [4.]])
 	theta1 = np.array([[2.], [4.]])
 	y_hat1 = predict_(x1, theta1)
-	print("y_hat1:", y_hat1, y_hat1.shape)
+	# print("y_hat1:", y_hat1, y_hat1.shape)
 
 	y1 = np.array([[2.], [7.], [12.], [17.], [22.]])
 	#ret = [float(y_hat1_i - y1_i) for y_hat1_i, y1_i in zip(y_hat1, y1)]

@@ -1,6 +1,17 @@
 # Machine Learning Module 00 - ex01
 
+<table>
+<tr><th>Exercise 01 -  TinyStatistician</th></tr>
+<tr><td>Turn-in directory : ex01/ </tr>
+<tr><td>Files to turn in : TinyStatistician.py </tr>
+<tr><td>Forbidden functions : Any functions which calculates mean, median quartiles, percentiles, variance or standard deviation.</tr>
+</table>
 
+### Objective
+
+These exercises are key assignments from the last bootcamp. If you haven’t completed them yet, you should finish them first before you continue with today’s exercises.
+
+### Instructions
 
 Create a class named **TinyStatistician** that implements the following methods: 
 

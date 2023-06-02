@@ -99,7 +99,7 @@ class Matrix:
 		else:
 			raise TypeError("Invalid type of input value.")
 
-	def	__rmul__(self, x):
+	def __rmul__(self, x):
 		return self * x
 
 	def __str__(self):
