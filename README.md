@@ -1,6 +1,6 @@
-# Machine Learning Module
+# Machine Learning Piscine
 
-> ***Summary : This is Bootcamp Machine Learning created by the Paris-based student organization 42 AI.***
+> ***Summary : This is Machine Learning Piscine(Bootcamp) created by the Paris-based student organization 42AI.***
 
 | Module |             Title              |                         Description                          |
 | :----: | :----------------------------: | :----------------------------------------------------------: |
