@@ -50,57 +50,29 @@ def data_spliter_by(x, y, zipcode):
 	return data_spliter(x, y_labelled, 0.8)
 
 def benchmark_train(degree, zipcode, x_train_poly, x_validation_poly, y_train, y_validation):
-	# Initialize variables to store the best hyperparameters and evaluation metric
-	best_classifier = None
-	best_hyperparameters = {'thetas': None, 'alpha': None, 'max_iter': None, 'lambda': None}
-	best_f1_score = -1
-	best_loss = float('inf')
-	
 	# Define the range of hyperparameter values to search
 	thetas_range = [np.zeros((x_train_poly.shape[1] + 1, 1)), np.random.rand(x_train_poly.shape[1] + 1, 1)]
 	alpha_range = [1e-2, 1e-1]
 	max_iter_range = [10000, 50000]
 	lambda_range = np.linspace(0.0, 1.0, num=3)
 	
-	# Perform grid search to find the best hyperparameters
+	classifiers = []
 	predictions = np.zeros(y_validation.shape)
+	# Perform grid search to find the best hyperparameters
 	for thetas, alpha, max_iter, lambda_ in itertools.product(thetas_range, alpha_range, max_iter_range, lambda_range):
 		# Initialize and train the logistic regression classifier
 		classifier = MyLR(thetas, alpha, max_iter, lambda_=lambda_)
 		classifier.fit_(x_train_poly, y_train)
 
 		# Evaluate the classifier on the test set
-		#print(x_validation_poly[:5])
 		probability = classifier.predict_(x_validation_poly)
-		#print(probability[:5])
 		binary_predictions = (probability >= 0.5).astype(int)
-		predictions[np.where(binary_predictions == 1)] = 1
+		predictions[np.where(binary_predictions == 1)] = zipcode
 		loss = classifier.loss_(y_validation, probability)
 		f1_score_value = f1_score_(y_validation, predictions)
-
 		print(f"zipcode: {zipcode}, degree: {degree}, loss: {loss}, f1_score: {f1_score_value}, alpha: {alpha}, max_iter: {max_iter}, lambda: {lambda_}")
-
-		# Update the best hyperparameters if the current classifier performs better
-		if f1_score_value > best_f1_score and loss < best_loss:
-			best_classifier = classifier
-			best_loss = loss 
-			best_f1_score = f1_score_value
-			best_hyperparameters['thetas'] = classifier.thetas
-			best_hyperparameters['alpha'] = alpha
-			best_hyperparameters['max_iter'] = max_iter
-			best_hyperparameters['lambda'] = lambda_
-	# Store the classifier and its evaluation metric
-	dict_classifier = {'classifier': best_classifier, 'loss': best_loss, 'f1_score': best_f1_score, 'degree': degree}
-
-	# Print the best hyperparameters and f1 score
-	print(f"Best Hyperparameters for zipcode {zipcode}:")
-	print("Thetas:", best_hyperparameters['thetas'])
-	print("Alpha:", best_hyperparameters['alpha'])
-	print("Max Iterations:", best_hyperparameters['max_iter'])
-	print("Lambda:", best_hyperparameters['lambda'])
-	print("Best f1 score:", best_f1_score)
-
-	return dict_classifier
+		classifiers.append({'classifier': classifier, 'loss': loss, 'f1_score': f1_score_value})
+	return classifiers
 
 def benchmark(x_features):
 	print(f"Starting training each classifier for logistic regression...")

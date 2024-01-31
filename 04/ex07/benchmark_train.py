@@ -11,35 +11,7 @@ path = os.path.join(os.path.dirname(__file__), '..', 'ex06')
 sys.path.insert(1, path)
 from ridge import MyRidge
 
-def t():
-	# Update the best hyperparameters if the current model performs better
-	if mse < best_mse:
-		best_model = model
-		best_mse = mse
-		best_hyperparameters['thetas'] = model.thetas
-		best_hyperparameters['alpha'] = alpha
-		best_hyperparameters['max_iter'] = max_iter
-		best_hyperparameters['lambda'] = lambda_ 
-
-	# Store the model and its evaluation metric
-	dict_model = {'model': best_model, 'mse': best_mse}
-	
-	# Print the best hyperparameters and MSE
-	print(f"Best Hyperparameters for degree {degree}:")
-	print("Thetas:", best_hyperparameters['thetas'])
-	print("Alpha:", best_hyperparameters['alpha'])
-	print("Max Iterations:", best_hyperparameters['max_iter'])
-	print("Best lambda:", best_hyperparameters['lambda'])
-	print("Best MSE:", best_mse)
-
-	# Save the model as a pickle file
-	#filename = f"model_degree_{degree}.pickle"
-	#with open(filename, 'wb') as file:
-        #	pickle.dump(dict_model, file)
-
-
 def benchmark_train(degree, x_train_poly, x_validation_poly, y_train, y_validation):
-	
 	# Define the range of hyperparameter values to search
 	thetas_range = [np.zeros((x_train_poly.shape[1] + 1, 1)), np.random.rand(x_train_poly.shape[1] + 1, 1)]
 	alpha_range = [1e-2]

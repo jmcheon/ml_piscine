@@ -1,4 +1,4 @@
-jimport sys, os, itertools, pickle
+import sys, os, itertools, pickle
 import numpy as np
 import pandas as pd
 from multiple_polynomial_model import add_polynomial_features

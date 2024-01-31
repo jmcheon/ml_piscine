@@ -26,32 +26,41 @@ def plot_scatters(x_features):
 	plt.legend()
 	plt.show()
 
-def plot_scatters_and_prediction(x_features, x, y ,best_model):
-	# Iterate over each feature
+def plot_scatters_and_prediction(x_features, x_test, y_test, best_model, best_degree):
+	fig, axes = plt.subplots(1, 3, figsize=(20, 15))
 	for i in range(len(x_features)):
-		# Extract the feature values and corresponding target values
-		x_feature = x[:, i].reshape(-1, 1)
-		y_target = y[:, 0].reshape(-1, 1)
-		x_train, x_test, y_train, y_test = data_spliter(x_feature, y_target, 0.8)
-		print("feature:", x_features[i])
-		print("x_feature:" ,x_feature.shape)
-		print("y_target:", y_target.shape)
-
-		# Reshape the sorted feature values to match the number of columns in the thetas
-		x_feature_ploy = add_polynomial_features(x_test, best_model.thetas.shape[0] - 1)
-		# print("x_feature_ploy shape:", x_feature_ploy.shape)
+		ax = axes[i]
+		x_test_ploy = add_polynomial_features(x_test, best_degree)
+		# print("x_test_ploy shape:", x_test_ploy.shape)
 
 		# Make predictions using the best model
-		y_pred = best_model.predict_(x_feature_ploy)
+		y_pred = best_model.predict_(x_test_ploy)
 
-		# Plot the scatter plot and prediction line
-		plt.scatter(x_test, y_test, color='blue', label='Data')
-		plt.plot(x_test, y_pred, color='red', label='Prediction')
-		plt.xlabel(f'{x_features[i]}')
-		plt.ylabel('Target')
-		plt.title(f'Scatter plot and prediction for {x_features[i]}')
-		plt.legend()
-		plt.show()
+		ax.scatter(x_test[:, i], y_test, color='blue', label='Data')
+		ax.scatter(x_test[:, i], y_pred, color='red', label='Prediction')
+		ax.set_xlabel(f'{x_features[i]}')
+		ax.set_ylabel('Target')
+		ax.set_title(f'Scatter plot and prediction for {x_features[i]}')
+		ax.legend()
+	plt.show()
+
+def plot_3d(x_test, y_test, best_model, best_degree):
+	fig = plt.figure()
+	ax = fig.add_subplot(111, projection='3d')
+
+	# Generate predictions using the best model
+	x_test_poly = add_polynomial_features(x_test, best_degree)
+	y_pred = best_model.predict_(x_test_poly)
+
+	# Plot the true price
+	ax.scatter(x_test[:, 1], x_test[:, 2], y_test, c='b', label='True Price')
+	# Plot the predicted price
+	ax.scatter(x_test[:, 1], x_test[:, 2], y_pred, c='r', label='Predicted Price')
+	ax.set_xlabel('prod_distance')
+	ax.set_ylabel('time_delivery')
+	ax.set_zlabel('Price')
+	ax.legend()
+	plt.show()
 
 def normalization(data):
 	data_min = np.min(data, axis=0)
@@ -63,32 +72,44 @@ def denormalization(normalized_data, data_min, data_max):
 	denormalized_data = normalized_data * (data_max - data_min) + data_min
 	return denormalized_data
 
+def select_best_model(degrees, dict_best_model_by_degree, dict_best_mses_by_degree):
+	best_model = None
+	best_mse = float('inf')
+	best_degree = 0
+	best_difference = float('-inf')
+	for degree in range(1, len(degrees)):
+		difference = dict_best_mses_by_degree[degree] - dict_best_mses_by_degree[degree + 1]
+		if difference > best_difference:
+			best_difference = difference
+			best_model = dict_best_model_by_degree[degree + 1]
+			best_mse = dict_best_mses_by_degree[degree + 1]
+			best_degree = degree + 1
+		#print(f"best difference:{best_difference}")
+		#print(f"difference:{difference}")
+	print(f"Best degree: {best_degree}")
+	print(f"Best mse: {best_mse}")
+	return best_model, best_degree
+
 def best_hypothesis(data, x_features, models):
 	# 1. Perform min-max normalization by calculating the minimum and maximum values for each feature
-	min_vals = np.min(data, axis=0)
-	max_vals = np.max(data, axis=0)
-	normalized_data, data_min, data_max = normalization(data)#= (data - min_vals) / (max_vals - min_vals)
+	normalized_data, data_min, data_max = normalization(data)
 
-
-	#x = np.array(normalized_data[x_features])
-	#y = np.array(normalized_data[['target']])
 	x = normalized_data[:, :len(x_features)]
 	y = normalized_data[:, -1].reshape(-1, 1)
 	print("x:", x.shape)
 	print("y:", y.shape)
-
-	# 2. Split your space_avocado.csv dataset into a training, a cross-validation and a test sets.
+	# 2. Split your space_avocado.csv dataset into a training, a cross-validation and a test sets.  
 	x_train, x_test, y_train, y_test = data_spliter(x, y, 0.8)
-	x_train, x_validation, y_train, y_validation = data_spliter(x_train, y_train, 0.8)
-
-
+	x_train, x_validation, y_train, y_validation = data_spliter(x_train, y_train, 0.8) 
 	# 3. Evaluate the best model on the test set.
-	best_model = None
-	best_mse = float('inf')
-	best_degree = 0
+	degrees = list(models.keys())
+	dict_best_mses_by_degree = {}
+	dict_best_model_by_degree = {}
 	dict_mses = {}
 	dict_lambdas = {}
 	for degree, lst_models in models.items():
+		best_model_by_degree = None
+		best_mse_by_degree = float('inf')
 		mses = []
 		lambdas = []
 		for i, model_data in zip(range(len(lst_models)), lst_models):
@@ -103,24 +124,18 @@ def best_hypothesis(data, x_features, models):
 			#print(degree, mse)
 			mses.append(mse)
 			lambdas.append(f"model{(degree - 1) * len(lst_models) + i + 1} + λ{model.lambda_:.1f}")
-			if mse < best_mse:
-				best_model = model
-				best_mse = mse
-				best_degree = degree
+			if mse < best_mse_by_degree:
+				best_model_by_degree = model
+				best_mse_by_degree = mse
+		dict_best_mses_by_degree[degree] = best_mse_by_degree
+		dict_best_model_by_degree[degree] = best_model_by_degree
 		dict_mses[degree] = mses
 		dict_lambdas[degree] = lambdas 
-	print(f"Best mse with test set: {best_mse}")
+	print(f"Best mses by degree: {dict_best_mses_by_degree}")
 	#print("dict mses:", dict_mses)
 	#print("dict_lambdas:", dict_lambdas)
 
-	# 4. Determine the best hypothesis based on the evaluation metrics, similar to before.
-	#best_model = min(models.items(), key=lambda x: x[1]['mse'])
-	#best_degree = best_model[0]
-	degrees = list(models.keys())
-	#best_model = models[best_degree]['model']
-	print("best_degree:", best_degree)
-
-	# 5. Plot the evaluation curve which help you to select the best model (evaluation metrics vs models + λ factor).
+	# 4. Plot the evaluation curve which help you to select the best model (evaluation metrics vs models + λ factor).
 	fig, axes = plt.subplots(2, 1, figsize=(15, 15))
 	fig.tight_layout(pad=15)
 	colors = ['red', 'green', 'blue', 'orange']
@@ -128,7 +143,7 @@ def best_hypothesis(data, x_features, models):
 		ax = axes[1]
 		if i < len(degrees) // 2:
 			ax = axes[0]
-		ax.scatter(dict_lambdas[i + 1], dict_mses[i + 1], c=colors[i], label=f"degree {i}")
+		ax.scatter(dict_lambdas[i + 1], dict_mses[i + 1], c=colors[i], label=f"degree {i + 1}")
 		ax.set_xlabel("λ Values")
 		ax.set_ylabel("MSE")
 		ax.set_title("Evaluation Curve: MSE vs. models(λ Values)")
@@ -138,43 +153,27 @@ def best_hypothesis(data, x_features, models):
 	plt.setp(axes[1].get_xticklabels(), rotation=90)
 	plt.show()
 	
+	# 5. Determine the best hypothesis based on the evaluation metrics, similar to before.
+	lst_degree_lambda_tags = []
+	for degree, model in zip(degrees, dict_best_model_by_degree.values()):
+		lst_degree_lambda_tags.append(f"degree {degree} + λ {model.lambda_}")
+	plt.plot(lst_degree_lambda_tags, dict_best_mses_by_degree.values(), marker='o')
+	plt.xlabel('Degree + λ')
+	plt.ylabel('Mean Squared Error')
+	plt.title('Model Evaluation Curve')
+	plt.show()
+	best_model, best_degree = select_best_model(degrees, dict_best_model_by_degree, dict_best_mses_by_degree)
+
+	# 6. Train the best model on the entire training set using the selected degree.
+	print("Training the best model on the entire training set using the selected degree....")
+	x_train_poly = add_polynomial_features(x_train, best_degree)
+	# print("x_train_poly:", x_train_poly.shape)
+	best_model.fit_(x_train_poly, y_train)
 
 	# 6. Plot the true price and the predicted price obtain via your best model with the different λ values 
 	# (meaning the dataset + the 5 predicted curves).
-	fig = plt.figure()
-	ax = fig.add_subplot(111, projection='3d')
-
-	# Plot the true price
-	ax.scatter(x_test[:, 1], x_test[:, 2], y_test, c='b', label='True Price')
-
-	# Generate predictions using the best model
-	x_test_poly = add_polynomial_features(x_test, best_degree)
-	# print("x_test_poly:", x_test_poly.shape)
-	y_pred = best_model.predict_(x_test_poly)
-
-	# Plot the predicted price
-	ax.scatter(x_test[:, 1], x_test[:, 2], y_pred, c='r', label='Predicted Price')
-	ax.set_xlabel('prod_distance')
-	ax.set_ylabel('time_delivery')
-	ax.set_zlabel('Price')
-	ax.legend()
-	plt.show()
-	#plot_scatters_and_prediction(x_features, x, y, best_model)
-
-def load_model_by_degree(degree):
-	# Load the models from the pickle file
-	filename = f"model_degree_{degree}.pickle"
-	with open(filename, 'rb') as file:
-		model = pickle.load(file)
-	
-	print(f"Degree: {degree}")
-	#print("Model:", model['model'])
-	print("Thetas:", model['model'].thetas)
-	print("Alpha:", model['model'].alpha)
-	print("Max Iterations:", model['model'].max_iter)
-	print("Lambda:", model_data['model'].lambda_)
-	print("MSE:", model['mse'])
-	print()
+	plot_3d(x_test, y_test, best_model, best_degree)
+	plot_scatters_and_prediction(x_features, x_test, y_test, best_model, best_degree)
 
 def load_models():
 	# Load the models from the pickle file
